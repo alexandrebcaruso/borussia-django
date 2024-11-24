@@ -1,0 +1,15 @@
+.venv
+.vscode
+.env
+__pycache__
+db.sqlite3
+
+# Ignore log files
+*.log
+
+# Ignore Django-specific files
+*.log
+*.pot
+*.pyc
+*.pyo
+*.db

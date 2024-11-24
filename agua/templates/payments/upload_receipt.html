@@ -1,0 +1,13 @@
+{% extends 'payments/base.html' %}
+
+{% block title %}Upload Payment Receipt{% endblock %}
+
+{% block content %}
+    <h1>Upload Payment Receipt for {{ payment.month|date:"F Y" }}</h1>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit Receipt</button>
+    </form>
+{% endblock %}
