@@ -69,30 +69,37 @@ def user_logout(request):
     logout(request)
     return redirect('login')  # Redirect to the login page after logout
 
-from .forms import PaymentReceiptForm  # Assuming you have a form for the receipt
+from .models import Payment
+from .forms import PaymentReceiptForm
+from django.contrib import messages
 
 @login_required
 def upload_receipt(request, year, month):
-    # Create a datetime object from the provided year and month
-    payment_date = datetime(year, month, 1)
-    
-    # Get or create a Payment object for the current user and the specific month
+    payment_date = datetime(year, month, 1)  # Create the payment month object
+
+    # Get or create the payment object for the user and month
     payment, created = Payment.objects.get_or_create(
         user=request.user,
         month=payment_date,
-        defaults={'status': 'pending'}  # Default status if no payment exists yet
+        defaults={'status': Payment.PENDING}
     )
-    
-    # Handle the form submission for uploading the receipt
+
     if request.method == 'POST':
-        form = PaymentReceiptForm(request.POST, request.FILES)
+        form = PaymentReceiptForm(request.POST, request.FILES, instance=payment)
         if form.is_valid():
-            payment.receipt = form.cleaned_data['receipt']
-            payment.status = 'Paid'
+            # Save the receipt
+            form.save()
+
+            # Update the status to awaiting approval
+            payment.status = Payment.AWAITING_APPROVAL
             payment.save()
+
+            messages.success(request, "Receipt uploaded successfully. Awaiting approval from the admin.")
             return redirect('dashboard')
+        else:
+            messages.error(request, "There was an error uploading the receipt. Please try again.")
     else:
-        form = PaymentReceiptForm()
+        form = PaymentReceiptForm(instance=payment)
 
     return render(request, 'payments/upload_receipt.html', {'form': form, 'payment': payment})
 
