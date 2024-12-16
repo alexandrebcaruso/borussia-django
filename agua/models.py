@@ -1,5 +1,5 @@
+from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import User
 
 class Payment(models.Model):
     PENDING = 'pending'
@@ -12,7 +12,7 @@ class Payment(models.Model):
         (PAID, 'Paid'),
     ]
     
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     month = models.DateField()
     status = models.CharField(
         max_length=20,
@@ -29,4 +29,22 @@ class Payment(models.Model):
     # Helper method to check if payment is approved
     def is_approved(self):
         return self.status == self.PAID
+    
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+    
+class CustomUser(AbstractUser):
+    email = models.EmailField(unique=True)
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    roles = models.ManyToManyField('Role', related_name='users')
+
+    def __str__(self):
+        return self.username
+
+class Role(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+
+    def __str__(self):
+        return self.name
     
