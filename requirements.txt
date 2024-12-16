@@ -2,3 +2,5 @@ Django
 uvicorn
 daphne
 Pillow
+psycopg2-binary
+python-dotenv
