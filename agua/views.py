@@ -1,91 +1,49 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import login_required
 from agua.models import Payment, CustomUser
 from .forms import PaymentReceiptForm
 from django.contrib import messages
+from django.contrib.auth import login, authenticate, logout
 from datetime import datetime
 from django.utils import timezone
+from agua.decorators import role_required
 
-# TODO: move to new file, e.g., `decorators.py`
-def role_required(role_name):
-    def decorator(view_func):
-        def _wrapped_view(request, *args, **kwargs):
-            if request.user.is_authenticated and request.user.roles.filter(name=role_name).exists():
-                return view_func(request, *args, **kwargs)
-            else:
-                # Redirect to a permission denied page or login page
-                return redirect('permission_denied')
-        return _wrapped_view
-    return decorator
-
-@login_required
-def dashboard(request):
-    # Get the current year
-    current_year = timezone.now().year
-
-    # Generate all months for the current year
-    months_in_year = []
-    for month in range(1, 13):
-        months_in_year.append(datetime(current_year, month, 1))
-
-    # Get all payments for the logged-in user
-    payments = Payment.objects.filter(user=request.user)
-
-    # Create a list of months with their payment status
-    months = []
-    for month in months_in_year:
-        # Find payment for the current month
-        payment = payments.filter(month__year=month.year, month__month=month.month).first()
-
-        # Determine the status based on whether a payment exists
-        if payment:
-            status = 'Paid'
-        else:
-            status = 'Pending'
-
-        # Add the month and status to the list
-        months.append({
-            'month': month.strftime('%B %Y'),
-            'month_obj': month,  # Store the actual month object for link generation
-            'status': status,
-            'payment': payment,  # Pass the payment object if exists
-        })
-    
-    # Create the context to pass to the template
-    context = {
-        'months': months,  # List of months with their status
-        'today': datetime.today().date(),
-    }
-    
-    return render(request, 'payments/dashboard.html', context)
-
-from django.contrib.auth import login, authenticate, logout
-from django.contrib import messages
-
-# User Login View
 def user_login(request):
+    # Check if the user is an ApplicationAdmin
+    is_app_admin = False
+    if request.user.is_authenticated:
+        is_app_admin = request.user.roles.filter(name='ApplicationAdmin').exists()
+
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('dashboard')
+            # Redirect based on user role
+            if user.roles.filter(name='ApplicationAdmin').exists():
+                return redirect('payment_list')
+            else:
+                return redirect('my_payments')
         else:
             messages.error(request, "Invalid username or password.")
     
-    return render(request, 'payments/login.html')
-
-from django.contrib.auth import logout
-from django.shortcuts import redirect
+    return render(request, 'login.html', {'is_app_admin': is_app_admin})
 
 def user_logout(request):
     logout(request)
     return redirect('login')  # Redirect to the login page after logout
 
-from .models import Payment
-from .forms import PaymentReceiptForm
-from django.contrib import messages
+@login_required
+def home(request):
+    # Check if the user is an ApplicationAdmin
+    is_app_admin = request.user.roles.filter(name='ApplicationAdmin').exists()
+
+    # Redirect based on user role
+    if is_app_admin:
+        return redirect('payment_list')
+    else:
+        return redirect('my_payments')
 
 @login_required
 def upload_receipt(request, year, month):
@@ -109,7 +67,7 @@ def upload_receipt(request, year, month):
             payment.save()
 
             messages.success(request, "Receipt uploaded successfully. Awaiting approval from the admin.")
-            return redirect('dashboard')
+            return redirect('my_payments')
         else:
             messages.error(request, "There was an error uploading the receipt. Please try again.")
     else:
@@ -117,21 +75,59 @@ def upload_receipt(request, year, month):
 
     return render(request, 'payments/upload_receipt.html', {'form': form, 'payment': payment})
 
-
 @login_required
 def profile(request):
-    # You can add any logic for the profile page here
-    return render(request, 'users/profile.html')
+    # Check if the user is an ApplicationAdmin
+    is_app_admin = request.user.roles.filter(name='ApplicationAdmin').exists()
 
-@login_required
+    if request.method == 'POST':
+        user = request.user
+        user.first_name = request.POST.get('first_name')
+        user.last_name = request.POST.get('last_name')
+        user.save()
+        messages.success(request, 'Your profile has been updated.')
+        return redirect('profile')
+
+    return render(request, 'users/profile.html', {'is_app_admin': is_app_admin})
+
 @role_required('ApplicationAdmin')
 def users_list(request):
     users = CustomUser.objects.all()
     return render(request, 'users/users_list.html', {'users': users})
 
-@user_passes_test(lambda u: u.is_staff)
-def manage_payments(request):
-    # Get all payments that are awaiting approval
+@login_required
+def my_payments(request):
+    # Check if the user is an ApplicationAdmin
+    is_app_admin = request.user.roles.filter(name='ApplicationAdmin').exists()
+
+    # Get the current year
+    current_year = datetime.now().year
+
+    # Generate all months for the current year
+    months_in_year = []
+    for month in range(1, 13):
+        months_in_year.append(datetime(current_year, month, 1))
+
+    # Ensure payments exist for each month of the current year
+    for month in months_in_year:
+        Payment.objects.get_or_create(
+            user=request.user,
+            month=month,
+            defaults={'status': Payment.AWAITING_APPROVAL}
+        )
+
+    # Get all payments for the logged-in user for the current year
+    payments = Payment.objects.filter(user=request.user, month__year=current_year)
+
+    return render(request, 'users/my_payments.html', {'payments': payments, 'is_app_admin': is_app_admin})
+
+@login_required
+@role_required('ApplicationAdmin')
+def payment_list(request):
+    # Check if the user is an ApplicationAdmin
+    is_app_admin = request.user.roles.filter(name='ApplicationAdmin').exists()
+
+    # Get all payments awaiting approval
     payments = Payment.objects.filter(status=Payment.AWAITING_APPROVAL)
 
     if request.method == 'POST':
@@ -148,6 +144,20 @@ def manage_payments(request):
                 payment.approved_at = None
             payment.save()
 
-        return redirect('manage_payments')
+        return redirect('payment_list')
 
+    return render(request, 'admin/payment_list.html', {'payments': payments, 'is_app_admin': is_app_admin})
+
+@role_required('ApplicationAdmin')
+def manage_payments(request):
+    payments = Payment.objects.filter(status=Payment.AWAITING_APPROVAL)
+    if request.method == 'POST':
+        payment_ids = request.POST.getlist('payment_ids')
+        action = request.POST.get('action')
+        payments_to_update = Payment.objects.filter(id__in=payment_ids)
+        if action == 'approve':
+            payments_to_update.update(status=Payment.PAID, approved_at=timezone.now())
+        elif action == 'reject':
+            payments_to_update.update(status=Payment.REJECTED, approved_at=None)
+        return redirect('manage_payments')
     return render(request, 'payments/manage_payments.html', {'payments': payments})

@@ -1,13 +1,11 @@
-{% extends 'payments/base.html' %}
-
-{% block title %}Upload Payment Receipt{% endblock %}
+<!-- upload_receipt.html -->
+{% extends 'base.html' %}
 
 {% block content %}
-    <h1>Upload Payment Receipt for {{ payment.month|date:"F Y" }}</h1>
-
+    <h1>Upload Payment Receipt</h1>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Submit Receipt</button>
+        <button type="submit">Upload</button>
     </form>
 {% endblock %}

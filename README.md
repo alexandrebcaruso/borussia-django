@@ -55,3 +55,7 @@ user.save()
 print(user.is_staff, user.is_superuser)
 ```
 
+## Generate database dump
+```bash 
+$ pg_dump -h localhost -U borussia_adm --password  pagamento_borussia > database.sql 
+```
