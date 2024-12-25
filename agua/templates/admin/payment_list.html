@@ -2,6 +2,45 @@
 
 {% block content %}
     <h1>Payment List</h1>
+
+    <!-- Search Form -->
+    <form method="get" action="{% url 'payment_list' %}">
+        <input type="text" name="search" placeholder="Search by username or email" value="{{ search_query }}">
+        <button type="submit">Search</button>
+    </form>
+
+    <!-- Filter by Status Form -->
+    <form method="get" action="{% url 'payment_list' %}">
+        <label for="status">Filter by Status:</label>
+        <select name="status" id="status">
+            <option value="">All</option>
+            <option value="awaiting_approval" {% if status_filter == 'awaiting_approval' %}selected{% endif %}>Awaiting Approval</option>
+            <option value="paid" {% if status_filter == 'paid' %}selected{% endif %}>Paid</option>
+            <option value="rejected" {% if status_filter == 'rejected' %}selected{% endif %}>Rejected</option>
+        </select>
+        <button type="submit">Filter</button>
+    </form>
+
+    <!-- Filter by Month Form -->
+    <form method="get" action="{% url 'payment_list' %}">
+        <label>
+            <input 
+                type="checkbox" 
+                name="current_month" 
+                id="current_month" 
+                {% if current_month_only %}checked{% endif %}
+            > 
+            Current Month
+        </label>
+        <br>
+        <label for="start_month">Start Month:</label>
+        <input type="month" name="start_month" id="start_month" value="{{ start_month }}" {% if current_month_only %}disabled{% endif %}>
+        <label for="end_month">End Month:</label>
+        <input type="month" name="end_month" id="end_month" value="{{ end_month }}" {% if current_month_only %}disabled{% endif %}>
+        <button type="submit">Filter by Month</button>
+    </form>
+
+    <!-- Payment List Table -->
     <form method="post">
         {% csrf_token %}
         <table>
@@ -15,7 +54,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for payment in payments %}
+                {% for payment in page_obj %}
                     <tr>
                         <td>{{ payment.user.username }}</td>
                         <td>{{ payment.month|date:"F Y" }}</td>
@@ -37,4 +76,53 @@
         <button type="submit" name="action" value="approve">Approve Selected</button>
         <button type="submit" name="action" value="reject">Reject Selected</button>
     </form>
+
+    <!-- Pagination -->
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1&search={{ search_query }}&status={{ status_filter }}&current_month={{ current_month_only }}&start_month={{ start_month }}&end_month={{ end_month }}">&laquo; first</a>
+                <a href="?page={{ page_obj.previous_page_number }}&search={{ search_query }}&status={{ status_filter }}&current_month={{ current_month_only }}&start_month={{ start_month }}&end_month={{ end_month }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}&search={{ search_query }}&status={{ status_filter }}&current_month={{ current_month_only }}&start_month={{ start_month }}&end_month={{ end_month }}">next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}&search={{ search_query }}&status={{ status_filter }}&current_month={{ current_month_only }}&start_month={{ start_month }}&end_month={{ end_month }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+
+    <!-- JavaScript to handle "Current Month" checkbox and range of months -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const currentMonthCheckbox = document.getElementById('current_month');
+            const startMonthInput = document.getElementById('start_month');
+            const endMonthInput = document.getElementById('end_month');
+
+            // Function to enable/disable month range inputs based on "Current Month" checkbox
+            function toggleMonthRangeInputs() {
+                if (currentMonthCheckbox.checked) {
+                    // Disable month range inputs and clear their values
+                    startMonthInput.disabled = true;
+                    endMonthInput.disabled = true;
+                    startMonthInput.value = '';
+                    endMonthInput.value = '';
+                } else {
+                    // Enable month range inputs
+                    startMonthInput.disabled = false;
+                    endMonthInput.disabled = false;
+                }
+            }
+
+            // Initial setup
+            toggleMonthRangeInputs();
+
+            // Add event listener to "Current Month" checkbox
+            currentMonthCheckbox.addEventListener('change', toggleMonthRangeInputs);
+        });
+    </script>
 {% endblock %}

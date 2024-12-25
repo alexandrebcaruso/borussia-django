@@ -121,32 +121,70 @@ def my_payments(request):
 
     return render(request, 'users/my_payments.html', {'payments': payments, 'is_app_admin': is_app_admin})
 
+
+from django.core.paginator import Paginator
+from django.db.models import Q
+
 @login_required
 @role_required('ApplicationAdmin')
 def payment_list(request):
-    # Check if the user is an ApplicationAdmin
     is_app_admin = request.user.roles.filter(name='ApplicationAdmin').exists()
 
-    # Get all payments awaiting approval
+    # Get all payments awaiting approval (default filter)
     payments = Payment.objects.filter(status=Payment.AWAITING_APPROVAL)
 
-    if request.method == 'POST':
-        payment_ids = request.POST.getlist('payment_ids')
-        action = request.POST.get('action')
+    # Search functionality
+    search_query = request.GET.get('search', '')
+    if search_query:
+        payments = payments.filter(
+            Q(user__username__icontains=search_query) |
+            Q(user__email__icontains=search_query)
+        )
 
-        for payment_id in payment_ids:
-            payment = Payment.objects.get(id=payment_id)
-            if action == 'approve':
-                payment.status = Payment.PAID
-                payment.approved_at = timezone.now()
-            elif action == 'reject':
-                payment.status = Payment.REJECTED
-                payment.approved_at = None
-            payment.save()
+    # Filter by status
+    status_filter = request.GET.get('status', '')
+    if status_filter:
+        payments = payments.filter(status=status_filter)
+    
+    # Check if "Current Month" checkbox is selected (default behavior)
+    current_month_only = request.GET.get('current_month', 'on') == 'on'
 
-        return redirect('payment_list')
+    # Check if a range of months is selected
+    start_month = request.GET.get('start_month', '')
+    end_month = request.GET.get('end_month', '')
 
-    return render(request, 'admin/payment_list.html', {'payments': payments, 'is_app_admin': is_app_admin})
+    # If a range of months is selected, disable "Current Month"
+    if start_month or end_month:
+        current_month_only = False
+
+    # Filter by current month if "Current Month" checkbox is selected
+    if current_month_only:
+        current_month = datetime.now().replace(day=1)  # Get the first day of the current month
+        payments = payments.filter(month=current_month)
+    else:
+        # Filter by month or range of months
+        if start_month:
+            start_date = datetime.strptime(start_month, '%Y-%m').date()
+            payments = payments.filter(month__gte=start_date)
+
+        if end_month:
+            end_date = datetime.strptime(end_month, '%Y-%m').date()
+            payments = payments.filter(month__lte=end_date)
+
+    # Pagination
+    paginator = Paginator(payments, 10)  # Show 10 payments per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'admin/payment_list.html', {
+        'is_app_admin': is_app_admin,
+        'page_obj': page_obj,
+        'search_query': search_query,
+        'status_filter': status_filter,
+        'current_month_only': current_month_only,
+        'start_month': start_month,
+        'end_month': end_month,
+    })
 
 @role_required('ApplicationAdmin')
 def manage_payments(request):
