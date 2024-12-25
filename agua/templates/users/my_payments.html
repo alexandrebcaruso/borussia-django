@@ -24,7 +24,7 @@
                         {% endif %}
                     </td>
                     <td>
-                        {% if payment.status == 'awaiting_approval' or payment.status == 'rejected' %}
+                        {% if payment.status == 'awaiting_payment' or payment.status == 'rejected' %}
                             <a href="{% url 'upload_receipt' payment.month.year payment.month.month %}">Upload Receipt</a>
                         {% endif %}
                     </td>
