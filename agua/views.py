@@ -151,12 +151,20 @@ def payment_list(request):
         payment_ids = request.POST.getlist('payment_ids')
         action = request.POST.get('action')
         payments_to_update = Payment.objects.filter(id__in=payment_ids)
+
         if action == 'approve':
             payments_to_update.update(status=Payment.PAID, approved_at=timezone.now())
             messages.success(request, "Selected payments have been approved.")
         elif action == 'reject':
             payments_to_update.update(status=Payment.REJECTED, approved_at=None)
             messages.success(request, "Selected payments have been rejected.")
+        elif action == 'set_awaiting_payment':
+            payments_to_update.update(status=Payment.AWAITING_PAYMENT, approved_at=None)
+            messages.success(request, "Selected payments have been set to 'Awaiting Payment'.")
+        elif action == 'set_awaiting_approval':
+            payments_to_update.update(status=Payment.AWAITING_APPROVAL, approved_at=None)
+            messages.success(request, "Selected payments have been set to 'Awaiting Approval'.")
+
         return redirect('payment_list')  # Reload the page to reflect changes
 
     # Get all payments (default)
