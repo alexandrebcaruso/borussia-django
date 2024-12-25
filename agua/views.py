@@ -53,7 +53,7 @@ def upload_receipt(request, year, month):
     payment, created = Payment.objects.get_or_create(
         user=request.user,
         month=payment_date,
-        defaults={'status': Payment.AWAITING_APPROVAL}
+        defaults={'status': Payment.AWAITING_PAYMENT}  # Default status
     )
 
     if request.method == 'POST':
@@ -113,14 +113,13 @@ def my_payments(request):
         Payment.objects.get_or_create(
             user=request.user,
             month=month,
-            defaults={'status': Payment.AWAITING_APPROVAL}
+            defaults={'status': Payment.AWAITING_PAYMENT}  # Default status
         )
 
     # Get all payments for the logged-in user for the current year
     payments = Payment.objects.filter(user=request.user, month__year=current_year)
 
     return render(request, 'users/my_payments.html', {'payments': payments, 'is_app_admin': is_app_admin})
-
 
 from django.core.paginator import Paginator
 from django.db.models import Q
@@ -130,8 +129,8 @@ from django.db.models import Q
 def payment_list(request):
     is_app_admin = request.user.roles.filter(name='ApplicationAdmin').exists()
 
-    # Get all payments awaiting approval (default filter)
-    payments = Payment.objects.filter(status=Payment.AWAITING_APPROVAL)
+    # Get all payments (default)
+    payments = Payment.objects.all()
 
     # Search functionality
     search_query = request.GET.get('search', '')
@@ -145,7 +144,7 @@ def payment_list(request):
     status_filter = request.GET.get('status', '')
     if status_filter:
         payments = payments.filter(status=status_filter)
-    
+
     # Check if "Current Month" checkbox is selected (default behavior)
     current_month_only = request.GET.get('current_month', 'on') == 'on'
 

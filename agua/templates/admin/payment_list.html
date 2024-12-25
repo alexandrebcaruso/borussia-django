@@ -13,11 +13,12 @@
     <form method="get" action="{% url 'payment_list' %}">
         <label for="status">Filtrar por status:</label>
         <select name="status" id="status">
-            <option value="">Todos</option>
+            <option value="">All</option>
+            <option value="awaiting_payment" {% if status_filter == 'awaiting_payment' %}selected{% endif %}>Aguardando pagamento</option>
             <option value="awaiting_approval" {% if status_filter == 'awaiting_approval' %}selected{% endif %}>Aguardando aprovação</option>
             <option value="paid" {% if status_filter == 'paid' %}selected{% endif %}>Pago</option>
-            <option value="rejected" {% if status_filter == 'rejected' %}selected{% endif %}>Rejeitado</option>
-        </select>
+            <option value="rejected" {% if status_filter == 'rejected' %}selected{% endif %}>Negado</option>
+        </select>        
         <button type="submit">Filtrar</button>
     </form>
 
