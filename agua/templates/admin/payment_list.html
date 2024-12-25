@@ -42,7 +42,7 @@
     </form>
 
     <!-- Payment List Table -->
-    <form method="post">
+    <form method="post" action="{% url 'payment_list' %}">
         {% csrf_token %}
         <table>
             <thead>

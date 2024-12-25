@@ -146,6 +146,19 @@ from django.db.models import Q
 def payment_list(request):
     is_app_admin = request.user.roles.filter(name='ApplicationAdmin').exists()
 
+    # Handle POST request for approving/rejecting payments
+    if request.method == 'POST':
+        payment_ids = request.POST.getlist('payment_ids')
+        action = request.POST.get('action')
+        payments_to_update = Payment.objects.filter(id__in=payment_ids)
+        if action == 'approve':
+            payments_to_update.update(status=Payment.PAID, approved_at=timezone.now())
+            messages.success(request, "Selected payments have been approved.")
+        elif action == 'reject':
+            payments_to_update.update(status=Payment.REJECTED, approved_at=None)
+            messages.success(request, "Selected payments have been rejected.")
+        return redirect('payment_list')  # Reload the page to reflect changes
+
     # Get all payments (default)
     payments = Payment.objects.all()
 
@@ -201,16 +214,3 @@ def payment_list(request):
         'start_month': start_month,
         'end_month': end_month,
     })
-
-@role_required('ApplicationAdmin')
-def manage_payments(request):
-    payments = Payment.objects.filter(status=Payment.AWAITING_APPROVAL)
-    if request.method == 'POST':
-        payment_ids = request.POST.getlist('payment_ids')
-        action = request.POST.get('action')
-        payments_to_update = Payment.objects.filter(id__in=payment_ids)
-        if action == 'approve':
-            payments_to_update.update(status=Payment.PAID, approved_at=timezone.now())
-        elif action == 'reject':
-            payments_to_update.update(status=Payment.REJECTED, approved_at=None)
-        return redirect('manage_payments')
