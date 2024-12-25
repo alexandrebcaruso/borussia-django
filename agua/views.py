@@ -7,6 +7,7 @@ from django.contrib.auth import login, authenticate, logout
 from datetime import datetime
 from django.utils import timezone
 from agua.decorators import role_required
+    
 
 def user_login(request):
     # Check if the user is an ApplicationAdmin
@@ -119,19 +120,19 @@ def my_payments(request):
     # Get the current year
     current_year = datetime.now().year
 
-    # Generate all months for the current year
-    months_in_year = []
-    for month in range(1, 13):
-        months_in_year.append(datetime(current_year, month, 1))
+    # Get the current month
+    current_month = datetime.now().replace(day=1)  # Get the first day of the current month
 
-    # Ensure payments exist for each month of the current year
-    for month in months_in_year:
-        Payment.objects.get_or_create(
+    # Check if the user already has a payment for the current month
+    payment = Payment.objects.filter(user=request.user, month=current_month).first()
+
+    if not payment:
+        # Create a payment for the current month
+        Payment.objects.create(
             user=request.user,
-            month=month,
-            defaults={'status': Payment.AWAITING_PAYMENT}  # Default status
+            month=current_month,
+            status=Payment.AWAITING_PAYMENT  # Default status
         )
-
     # Get all payments for the logged-in user for the current year
     payments = Payment.objects.filter(user=request.user, month__year=current_year)
 
@@ -213,4 +214,3 @@ def manage_payments(request):
         elif action == 'reject':
             payments_to_update.update(status=Payment.REJECTED, approved_at=None)
         return redirect('manage_payments')
-    return render(request, 'payments/manage_payments.html', {'payments': payments})
