@@ -12,7 +12,7 @@
         </div>
     </form>
 
-    <!-- Filter by Status Form -->
+    <!-- Filter by Situação Form -->
     <form method="get" action="{% url 'payment_list' %}" class="mb-4">
         <div class="row g-3 align-items-center">
             <div class="col-auto">
@@ -20,7 +20,7 @@
             </div>
             <div class="col-auto">
                 <select name="status" id="status" class="form-select">
-                    <option value="">All</option>
+                    <option value="">Todos</option>
                     <option value="awaiting_payment" {% if status_filter == 'awaiting_payment' %}selected{% endif %}>Aguardando pagamento</option>
                     <option value="awaiting_approval" {% if status_filter == 'awaiting_approval' %}selected{% endif %}>Aguardando aprovação</option>
                     <option value="paid" {% if status_filter == 'paid' %}selected{% endif %}>Pago</option>
@@ -69,7 +69,7 @@
                     <tr>
                         <th>Usuário</th>
                         <th>Mês</th>
-                        <th>Status</th>
+                        <th>Situação</th>
                         <th>Comprovante</th>
                         <th>Ação</th>
                     </tr>

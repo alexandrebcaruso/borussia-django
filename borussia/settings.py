@@ -162,3 +162,10 @@ AUTHENTICATION_BACKENDS = [
     'agua.backends.CustomUserBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
+
+LANGUAGE_CODE = 'pt-br'  # Set the default language to Brazilian Portuguese
+
+TIME_ZONE = 'America/Sao_Paulo'  # Set the appropriate time zone
+
+USE_I18N = True  # Enable internationalization
+USE_L10N = True  # Enable localization

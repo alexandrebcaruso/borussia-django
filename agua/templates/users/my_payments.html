@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>My Payments</h1>
+<h1>Meus comprovantes</h1>
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>Month</th>
-            <th>Status</th>
-            <th>Receipt</th>
-            <th>Actions</th>
+            <th>Mẽs</th>
+            <th>Situação</th>
+            <th>Comprovantes</th>
+            <th>Ações</th>
         </tr>
     </thead>
     <tbody>
@@ -21,13 +21,13 @@
                 <a href="{{ payment.receipt.url }}" target="_blank" class="btn btn-sm btn-outline-primary">View
                     Receipt</a>
                 {% else %}
-                <span class="text-muted">No Receipt</span>
+                <span class="text-muted">Sem comprovantes</span>
                 {% endif %}
             </td>
             <td>
                 {% if payment.status == 'awaiting_payment' or payment.status == 'rejected' %}
                 <a href="{% url 'upload_receipt' payment.month.year payment.month.month %}"
-                    class="btn btn-sm btn-success">Upload Receipt</a>
+                    class="btn btn-sm btn-success">Enviar comprovante</a>
                 {% endif %}
             </td>
         </tr>
