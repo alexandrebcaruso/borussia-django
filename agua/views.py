@@ -20,6 +20,22 @@ def user_login(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
+
+            # If the user is an app admin, ensure all regular users have a payment for the current month
+            if user.roles.filter(name='ApplicationAdmin').exists():
+                current_month = datetime.now().replace(day=1)  # Get the first day of the current month
+                regular_users = CustomUser.objects.filter(roles__name='RegularUser')
+
+                for regular_user in regular_users:
+                    # Check if the user already has a payment for the current month
+                    if not Payment.objects.filter(user=regular_user, month=current_month).exists():
+                        # Create a payment for the current month
+                        Payment.objects.create(
+                            user=regular_user,
+                            month=current_month,
+                            status=Payment.AWAITING_PAYMENT  # Default status
+                        )
+
             # Redirect based on user role
             if user.roles.filter(name='ApplicationAdmin').exists():
                 return redirect('payment_list')
