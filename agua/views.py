@@ -107,11 +107,6 @@ def profile(request):
 
     return render(request, 'users/profile.html', {'is_app_admin': is_app_admin})
 
-@role_required('ApplicationAdmin')
-def users_list(request):
-    users = CustomUser.objects.all()
-    return render(request, 'users/users_list.html', {'users': users})
-
 @login_required
 def my_payments(request):
     # Check if the user is an ApplicationAdmin

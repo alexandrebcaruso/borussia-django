@@ -27,7 +27,6 @@ urlpatterns = [
     path('logout/', views.user_logout, name='logout'),
     path('my-payments/', views.my_payments, name='my_payments'),
     path('profile/', views.profile, name='profile'),
-    path('users-list/', views.users_list, name='users_list'),
     path('upload-receipt/<int:year>/<int:month>/', views.upload_receipt, name='upload_receipt'),
     path('payment-list/', views.payment_list, name='payment_list'), 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
