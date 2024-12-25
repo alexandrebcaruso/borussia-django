@@ -13,16 +13,16 @@
         <ul>
             {% if user.is_authenticated %}
                 <!-- Regular User Links -->
-                <li><a href="{% url 'my_payments' %}">My Payments</a></li>
-                <li><a href="{% url 'profile' %}">Profile</a></li>
+                <li><a href="{% url 'my_payments' %}">Meus pagamentos</a></li>
+                <li><a href="{% url 'profile' %}">Perfil</a></li>
                 <!-- App Admin Links -->
                 {% if is_app_admin %}
-                    <li><a href="{% url 'payment_list' %}">Payment List</a></li>
+                    <li><a href="{% url 'payment_list' %}">Gestão de Pagamentos</a></li>
                 {% endif %}
                 <!-- Logout Link -->
-                <li><a href="{% url 'logout' %}">Logout</a></li>
+                <li><a href="{% url 'logout' %}">Sair</a></li>
             {% else %}
-                <li><a href="{% url 'login' %}">Login</a></li>
+                <li><a href="{% url 'login' %}">Entrar</a></li>
             {% endif %}
         </ul>
     </nav>

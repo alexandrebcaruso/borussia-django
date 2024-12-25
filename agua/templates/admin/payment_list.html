@@ -1,24 +1,24 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Payment List</h1>
+    <h1>Gestão de Pagamentos</h1>
 
     <!-- Search Form -->
     <form method="get" action="{% url 'payment_list' %}">
-        <input type="text" name="search" placeholder="Search by username or email" value="{{ search_query }}">
-        <button type="submit">Search</button>
+        <input type="text" name="search" placeholder="Buscar nome de usuário ou email" value="{{ search_query }}">
+        <button type="submit">Buscar</button>
     </form>
 
     <!-- Filter by Status Form -->
     <form method="get" action="{% url 'payment_list' %}">
-        <label for="status">Filter by Status:</label>
+        <label for="status">Filtrar por status:</label>
         <select name="status" id="status">
-            <option value="">All</option>
-            <option value="awaiting_approval" {% if status_filter == 'awaiting_approval' %}selected{% endif %}>Awaiting Approval</option>
-            <option value="paid" {% if status_filter == 'paid' %}selected{% endif %}>Paid</option>
-            <option value="rejected" {% if status_filter == 'rejected' %}selected{% endif %}>Rejected</option>
+            <option value="">Todos</option>
+            <option value="awaiting_approval" {% if status_filter == 'awaiting_approval' %}selected{% endif %}>Aguardando aprovação</option>
+            <option value="paid" {% if status_filter == 'paid' %}selected{% endif %}>Pago</option>
+            <option value="rejected" {% if status_filter == 'rejected' %}selected{% endif %}>Rejeitado</option>
         </select>
-        <button type="submit">Filter</button>
+        <button type="submit">Filtrar</button>
     </form>
 
     <!-- Filter by Month Form -->
@@ -30,14 +30,14 @@
                 id="current_month" 
                 {% if current_month_only %}checked{% endif %}
             > 
-            Current Month
+            Mês atual
         </label>
         <br>
-        <label for="start_month">Start Month:</label>
+        <label for="start_month">Mês início:</label>
         <input type="month" name="start_month" id="start_month" value="{{ start_month }}" {% if current_month_only %}disabled{% endif %}>
-        <label for="end_month">End Month:</label>
+        <label for="end_month">Mês fim:</label>
         <input type="month" name="end_month" id="end_month" value="{{ end_month }}" {% if current_month_only %}disabled{% endif %}>
-        <button type="submit">Filter by Month</button>
+        <button type="submit">Filtrar por mês</button>
     </form>
 
     <!-- Payment List Table -->
@@ -46,11 +46,11 @@
         <table>
             <thead>
                 <tr>
-                    <th>User</th>
-                    <th>Month</th>
+                    <th>Usuário</th>
+                    <th>Mês</th>
                     <th>Status</th>
-                    <th>Receipt</th>
-                    <th>Actions</th>
+                    <th>Comprovante</th>
+                    <th>Ação</th>
                 </tr>
             </thead>
             <tbody>
@@ -61,9 +61,9 @@
                         <td>{{ payment.get_status_display }}</td>
                         <td>
                             {% if payment.receipt %}
-                                <a href="{{ payment.receipt.url }}" target="_blank">View Receipt</a>
+                                <a href="{{ payment.receipt.url }}" target="_blank">Ver comprovante</a>
                             {% else %}
-                                No Receipt
+                                Sem comprovante
                             {% endif %}
                         </td>
                         <td>
@@ -73,8 +73,8 @@
                 {% endfor %}
             </tbody>
         </table>
-        <button type="submit" name="action" value="approve">Approve Selected</button>
-        <button type="submit" name="action" value="reject">Reject Selected</button>
+        <button type="submit" name="action" value="approve">Aprovar selecionado</button>
+        <button type="submit" name="action" value="reject">Rejeitar selecionados</button>
     </form>
 
     <!-- Pagination -->
@@ -86,7 +86,7 @@
             {% endif %}
 
             <span class="current">
-                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
             </span>
 
             {% if page_obj.has_next %}
