@@ -1,3 +1,4 @@
+import os
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from agua.models import Payment, CustomUser
@@ -7,7 +8,6 @@ from django.contrib.auth import login, authenticate, logout
 from datetime import datetime
 from django.utils import timezone
 from agua.decorators import role_required
-    
 
 def user_login(request):
     # Check if the user is an ApplicationAdmin
@@ -141,7 +141,7 @@ from django.db.models import Q
 def payment_list(request):
     is_app_admin = request.user.roles.filter(name='ApplicationAdmin').exists()
 
-    # Handle POST request for approving/rejecting payments
+    # Handle POST request for actions
     if request.method == 'POST':
         payment_ids = request.POST.getlist('payment_ids')
         action = request.POST.get('action')
@@ -159,8 +159,16 @@ def payment_list(request):
         elif action == 'set_awaiting_approval':
             payments_to_update.update(status=Payment.AWAITING_APPROVAL, approved_at=None)
             messages.success(request, "Selected payments have been set to 'Awaiting Approval'.")
-
-        return redirect('payment_list')  # Reload the page to reflect changes
+        elif action == 'delete_receipt':
+            for payment in payments_to_update:
+                if payment.receipt:
+                    if os.path.isfile(payment.receipt.path):
+                        os.remove(payment.receipt.path)  # Delete the file from the filesystem
+                    payment.receipt.delete()  # Delete the file reference from the database
+                    payment.status = Payment.AWAITING_PAYMENT  # Set status to "awaiting_payment"
+                    payment.save()
+            messages.success(request, "Receipts for selected payments have been deleted.")
+        return redirect('payment_list')
 
     # Get all payments (default)
     payments = Payment.objects.all()

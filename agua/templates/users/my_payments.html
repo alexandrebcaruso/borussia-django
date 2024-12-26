@@ -1,37 +1,64 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Meus comprovantes</h1>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Mẽs</th>
-            <th>Situação</th>
-            <th>Comprovantes</th>
-            <th>Ações</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for payment in payments %}
-        <tr>
-            <td>{{ payment.month|date:"F Y" }}</td>
-            <td>{{ payment.get_status_display }}</td>
-            <td>
-                {% if payment.receipt %}
-                <a href="{{ payment.receipt.url }}" target="_blank" class="btn btn-sm btn-outline-primary">View
-                    Receipt</a>
-                {% else %}
-                <span class="text-muted">Sem comprovantes</span>
-                {% endif %}
-            </td>
-            <td>
-                {% if payment.status == 'awaiting_payment' or payment.status == 'rejected' %}
-                <a href="{% url 'upload_receipt' payment.month.year payment.month.month %}"
-                    class="btn btn-sm btn-success">Enviar comprovante</a>
-                {% endif %}
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="container mt-4">
+    <h1>Meus Pagamentos</h1>
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Mês</th>
+                <th>Status</th>
+                <th>Comprovante</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for payment in payments %}
+                <tr>
+                    <td>{{ payment.month|date:"F Y" }}</td>
+                    <td>{{ payment.get_status_display }}</td>
+                    <td>
+                        {% if payment.receipt_exists %}
+                            <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#receiptModal{{ payment.id }}">
+                                Ver comprovante
+                            </button>
+                        {% else %}
+                            <span class="text-muted">Sem comprovante</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if payment.status == 'awaiting_payment' or payment.status == 'rejected' %}
+                            <a href="{% url 'upload_receipt' payment.month.year payment.month.month %}" class="btn btn-sm btn-success">Enviar Comprovante</a>
+                        {% endif %}
+                    </td>
+                </tr>
+
+                <!-- Modal for each payment -->
+                <div class="modal fade" id="receiptModal{{ payment.id }}" tabindex="-1" aria-labelledby="receiptModalLabel{{ payment.id }}" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="receiptModalLabel{{ payment.id }}">Comprovante de Pagamento</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                {% if payment.receipt %}
+                                    <img src="{{ payment.receipt.url }}" class="img-fluid" alt="Comprovante de Pagamento">
+                                {% else %}
+                                    <p class="text-muted">Nenhum comprovante disponível.</p>
+                                {% endif %}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Bootstrap JS (required for modals) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 {% endblock %}
