@@ -1,4 +1,4 @@
-/* styles.css */
+/* Profile page */
 
 label.form-label { 
     font-weight: bold;
@@ -6,4 +6,16 @@ label.form-label {
 
 label.form-label, label.form-label ~ p{
     display: inline;
+}
+
+.form-control-static {
+    display: inline-block;
+    padding: 0.375rem 0.75rem;
+    margin-bottom: 0;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #e9ecef;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
 }

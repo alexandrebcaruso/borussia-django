@@ -4,7 +4,7 @@
 <div class="row justify-content-center">
     <div class="col-md-6">
         <h1>Perfil</h1>
-        <form method="post">
+        <form method="post" id="profile-form">
             {% csrf_token %}
             <div class="mb-3">
                 <label class="form-label">Nome de usuário:</label>
@@ -16,16 +16,50 @@
             </div>
             <div class="mb-3">
                 <label for="first_name" class="form-label">Nome:</label>
-                <p class="form-control-static">{{ user.first_name }}</p>
-                <!-- <input type="text" name="first_name" class="form-control" value="{{ user.first_name }}"> -->
+                <p class="form-control-static" id="first-name-text">{{ user.first_name }}</p>
+                <input type="text" name="first_name" class="form-control" id="first-name-input" value="{{ user.first_name }}" style="display: none;">
             </div>
             <div class="mb-3">
                 <label for="last_name" class="form-label">Sobrenome:</label>
-                <p class="form-control-static">{{ user.last_name }}</p>
-                <!-- <input type="text" name="last_name" class="form-control" value="{{ user.last_name }}"> -->
+                <p class="form-control-static" id="last-name-text">{{ user.last_name }}</p>
+                <input type="text" name="last_name" class="form-control" id="last-name-input" value="{{ user.last_name }}" style="display: none;">
             </div>
-            <button type="submit" class="btn btn-primary">Salvar</button>
+            <button type="button" class="btn btn-primary" id="edit-button">Editar</button>
+            <button type="submit" class="btn btn-success" id="save-button" style="display: none;">Salvar</button>
         </form>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const editButton = document.getElementById('edit-button');
+        const saveButton = document.getElementById('save-button');
+        const firstNameText = document.getElementById('first-name-text');
+        const firstNameInput = document.getElementById('first-name-input');
+        const lastNameText = document.getElementById('last-name-text');
+        const lastNameInput = document.getElementById('last-name-input');
+
+        // Toggle between text and input fields
+        editButton.addEventListener('click', function () {
+            // Hide text and show input fields
+            firstNameText.style.display = 'none';
+            firstNameInput.style.display = 'block';
+            lastNameText.style.display = 'none';
+            lastNameInput.style.display = 'block';
+
+            // Hide the Edit button and show the Save button
+            editButton.style.display = 'none';
+            saveButton.style.display = 'block';
+        });
+
+        // Show the Save button when the input values change
+        firstNameInput.addEventListener('input', function () {
+            saveButton.style.display = 'block';
+        });
+
+        lastNameInput.addEventListener('input', function () {
+            saveButton.style.display = 'block';
+        });
+    });
+</script>
 {% endblock %}
