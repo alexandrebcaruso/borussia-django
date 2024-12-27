@@ -56,6 +56,7 @@ class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
+    phone_number = models.CharField(max_length=12, blank=True, null=True)
     roles = models.ManyToManyField('Role', related_name='users')
 
     def __str__(self):
@@ -66,4 +67,3 @@ class Role(models.Model):
 
     def __str__(self):
         return self.name
-    

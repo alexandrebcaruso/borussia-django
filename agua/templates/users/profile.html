@@ -24,6 +24,11 @@
                 <p class="form-control-static" id="last-name-text">{{ user.last_name }}</p>
                 <input type="text" name="last_name" class="form-control" id="last-name-input" value="{{ user.last_name }}" style="display: none;">
             </div>
+            <div class="mb-3">
+                <label for="phone_number" class="form-label">Telefone:</label>
+                <p class="form-control-static" id="phone-number-text">{{ user.phone_number }}</p>
+                <input type="text" name="phone_number" class="form-control" id="phone-number-input" value="{{ user.phone_number }}" style="display: none;">
+            </div>
             <button type="button" class="btn btn-primary" id="edit-button">Editar</button>
             <button type="submit" class="btn btn-success" id="save-button" style="display: none;">Salvar</button>
         </form>
@@ -38,6 +43,8 @@
         const firstNameInput = document.getElementById('first-name-input');
         const lastNameText = document.getElementById('last-name-text');
         const lastNameInput = document.getElementById('last-name-input');
+        const phoneNumberText = document.getElementById('phone-number-text');
+        const phoneNumberInput = document.getElementById('phone-number-input');
 
         // Toggle between text and input fields
         editButton.addEventListener('click', function () {
@@ -46,6 +53,8 @@
             firstNameInput.style.display = 'block';
             lastNameText.style.display = 'none';
             lastNameInput.style.display = 'block';
+            phoneNumberText.style.display = 'none';
+            phoneNumberInput.style.display = 'block';
 
             // Hide the Edit button and show the Save button
             editButton.style.display = 'none';
@@ -58,6 +67,10 @@
         });
 
         lastNameInput.addEventListener('input', function () {
+            saveButton.style.display = 'block';
+        });
+
+        phoneNumberInput.addEventListener('input', function () {
             saveButton.style.display = 'block';
         });
     });

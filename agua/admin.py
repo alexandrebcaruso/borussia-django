@@ -7,10 +7,10 @@ from django.urls import path
 
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
-    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff')
+    list_display = ('username', 'email', 'first_name', 'last_name', 'phone_number', 'is_staff')  # Add 'phone_number' here
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
-        ('Personal info', {'fields': ('first_name', 'last_name', 'email')}),
+        ('Personal info', {'fields': ('first_name', 'last_name', 'email', 'phone_number')}),  # Add 'phone_number' here
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
         ('Roles', {'fields': ('roles',)}),
@@ -18,7 +18,7 @@ class CustomUserAdmin(UserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'password1', 'password2', 'email', 'first_name', 'last_name', 'roles'),
+            'fields': ('username', 'password1', 'password2', 'email', 'first_name', 'last_name', 'phone_number', 'roles'),  # Add 'phone_number' here
         }),
     )
 

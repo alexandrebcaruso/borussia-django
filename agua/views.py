@@ -100,12 +100,13 @@ def profile(request):
 
     if request.method == 'POST':
         user = request.user
-        # Update the user's first name and last name
+        # Update the user's first name, last name, and phone number
         user.first_name = request.POST.get('first_name', user.first_name)
         user.last_name = request.POST.get('last_name', user.last_name)
+        user.phone_number = request.POST.get('phone_number', user.phone_number)
         user.save()
         messages.success(request, 'Seu perfil foi atualizado.')
-        return redirect('perfil') 
+        return redirect('perfil')
 
     return render(request, 'users/profile.html', {'is_app_admin': is_app_admin})
 
