@@ -28,7 +28,7 @@
                     </td>
                     <td>
                         {% if payment.status == 'awaiting_payment' or payment.status == 'rejected' %}
-                            <a href="{% url 'upload_receipt' payment.month.year payment.month.month %}" class="btn btn-sm btn-success">Enviar Comprovante</a>
+                            <a href="{% url 'enviar_comprovante' payment.month.year payment.month.month %}" class="btn btn-sm btn-success">Enviar Comprovante</a>
                         {% endif %}
                     </td>
                 </tr>

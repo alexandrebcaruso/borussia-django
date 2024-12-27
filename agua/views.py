@@ -39,9 +39,9 @@ def user_login(request):
 
             # Redirect based on user role
             if user.roles.filter(name='ApplicationAdmin').exists():
-                return redirect('payment_list')
+                return redirect('gestao_pagamentos')
             else:
-                return redirect('my_payments')
+                return redirect('meus_pagamentos')
         else:
             messages.error(request, "Invalid username or password.")
     
@@ -49,7 +49,7 @@ def user_login(request):
 
 def user_logout(request):
     logout(request)
-    return redirect('login')  # Redirect to the login page after logout
+    return redirect('entrar')  
 
 @login_required
 def home(request):
@@ -58,13 +58,14 @@ def home(request):
 
     # Redirect based on user role
     if is_app_admin:
-        return redirect('payment_list')
+        return redirect('gestao_pagamentos')
     else:
-        return redirect('my_payments')
+        return redirect('meus_pagamentos')
+
 
 @login_required
 def upload_receipt(request, year, month):
-    payment_date = datetime(year, month, 1)  # Create the payment month object
+    payment_date = datetime(year, month, 1)  
 
     # Get or create the payment object for the user and month
     payment, created = Payment.objects.get_or_create(
@@ -84,7 +85,7 @@ def upload_receipt(request, year, month):
             payment.save()
 
             messages.success(request, "Receipt uploaded successfully. Awaiting approval from the admin.")
-            return redirect('my_payments')
+            return redirect('meus_pagamentos')
         else:
             messages.error(request, "There was an error uploading the receipt. Please try again.")
     else:
@@ -103,8 +104,8 @@ def profile(request):
         user.first_name = request.POST.get('first_name', user.first_name)
         user.last_name = request.POST.get('last_name', user.last_name)
         user.save()
-        messages.success(request, 'Your profile has been updated.')
-        return redirect('profile')
+        messages.success(request, 'Seu perfil foi atualizado.')
+        return redirect('perfil') 
 
     return render(request, 'users/profile.html', {'is_app_admin': is_app_admin})
 
@@ -169,7 +170,7 @@ def payment_list(request):
                     payment.status = Payment.AWAITING_PAYMENT  # Set status to "awaiting_payment"
                     payment.save()
             messages.success(request, "Receipts for selected payments have been deleted.")
-        return redirect('payment_list')
+        return redirect('gestao_pagamentos')
 
     # Get all payments (default)
     payments = Payment.objects.all()
@@ -226,3 +227,4 @@ def payment_list(request):
         'start_month': start_month,
         'end_month': end_month,
     })
+
