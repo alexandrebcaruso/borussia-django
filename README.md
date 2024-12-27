@@ -1,8 +1,13 @@
+## Before running the project
+```bash 
+python3 manage.py collectstatic
+```
+
 ## Run the project
-```python
+```bash
 uvicorn borussia.asgi:application --reload
 ```
-Tip: put the above code in a .vscode/launch file
+Tip: put the above code in a .vscode/launch.json file
 
 ## Create user 1st user and assigne roles
 

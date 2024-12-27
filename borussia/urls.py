@@ -29,4 +29,4 @@ urlpatterns = [
     path('profile/', views.profile, name='profile'),
     path('upload-receipt/<int:year>/<int:month>/', views.upload_receipt, name='upload_receipt'),
     path('payment-list/', views.payment_list, name='payment_list'), 
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

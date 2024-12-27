@@ -136,12 +136,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_ROOT = BASE_DIR / 'static'
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # If you have custom static directories:
 STATICFILES_DIRS = [
-    BASE_DIR / "agua/static",  # Add custom static directory if needed
+    os.path.join(BASE_DIR, 'agua/static')
 ]
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
