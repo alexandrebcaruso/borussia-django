@@ -174,7 +174,7 @@ def payment_list(request):
         return redirect('gestao_pagamentos')
 
     # Get all payments (default)
-    payments = Payment.objects.all()
+    payments = Payment.objects.all().order_by('-id')
 
     # Search functionality
     search_query = request.GET.get('search', '')
