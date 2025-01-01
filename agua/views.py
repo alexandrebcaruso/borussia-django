@@ -229,3 +229,19 @@ def payment_list(request):
         'end_month': end_month,
     })
 
+@login_required
+@role_required('ApplicationAdmin')
+def payment_history(request, user_id, year, month):
+    is_app_admin = request.user.roles.filter(name='ApplicationAdmin').exists()
+
+    user = CustomUser.objects.get(id=user_id)
+    # Filter payments by user and the selected month
+    payments = Payment.objects.filter(user=user, month__year=year, month__month=month).order_by('-month')
+    # Create a datetime object for the selected month
+    selected_month = datetime(year, month, 1)
+    return render(request, 'admin/payment_history.html', {
+        'is_app_admin': is_app_admin,
+        'user': user,
+        'payments': payments,
+        'selected_month': selected_month  # Pass the selected month as a datetime object
+    })

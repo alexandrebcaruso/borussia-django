@@ -8,6 +8,7 @@ db.sqlite3
 # Ignore log files
 *.log
 
+
 # Ignore Django-specific files
 *.log
 *.pot
@@ -16,3 +17,5 @@ db.sqlite3
 *.db
 
 staticfiles
+media
+receipts

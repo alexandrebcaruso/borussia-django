@@ -71,6 +71,7 @@
                         <th>Mês</th>
                         <th>Status</th>
                         <th>Comprovante</th>
+                        <th>Histórico</th>
                         <th>Ação</th>
                     </tr>
                 </thead>
@@ -89,6 +90,12 @@
                             {% else %}
                             <span class="text-muted">Sem comprovante</span>
                             {% endif %}
+                        </td>
+                        <td>
+                            <!-- Payment History Button -->
+                            <a href="{% url 'historico_pagamentos' payment.user.id payment.month.year payment.month.month %}" class="btn btn-sm btn-info">
+                                Ver Histórico
+                            </a>
                         </td>
                         <td>
                             <input type="checkbox" name="payment_ids" value="{{ payment.id }}">
