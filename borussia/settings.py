@@ -18,7 +18,12 @@ mimetypes.add_type("text/javascript", ".js", True)
 mimetypes.add_type("text/css", ".css", True)
 
 from dotenv import load_dotenv, find_dotenv
-load_dotenv(find_dotenv())
+# load_dotenv(find_dotenv())
+
+# load env for production 
+load_dotenv('/var/www/borussia/.env.production')
+
+print(f"DEBUG: {os.getenv('DEBUG')}")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -162,5 +167,8 @@ USE_L10N = True  # Enable localization
 # Base settings
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 SECRET_KEY = os.getenv('SECRET_KEY')
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
+# ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
+
+ALLOWED_HOSTS = ['acaruso.com.br', 'www.acaruso.com.br', '185.185.70.187', 'localhost', '127.0.0.1']
+print(f"ALLOWED_HOSTS: {ALLOWED_HOSTS}")
 
