@@ -30,4 +30,12 @@ urlpatterns = [
     path('enviar-comprovante/<int:year>/<int:month>/', views.upload_receipt, name='enviar_comprovante'),
     path('gestao-pagamentos/', views.payment_list, name='gestao_pagamentos'), 
     path('historico-pagamentos/<int:user_id>/<int:year>/<int:month>/', views.payment_history, name='historico_pagamentos'),
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+]
+
+print(f"{settings.DEBUG} <<<<<<<<<<<<<<<<<<<<,DEBUG?")
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+print(urlpatterns)
+

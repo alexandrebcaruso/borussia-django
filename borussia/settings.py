@@ -17,13 +17,12 @@ import mimetypes
 mimetypes.add_type("text/javascript", ".js", True)
 mimetypes.add_type("text/css", ".css", True)
 
-from dotenv import load_dotenv, find_dotenv
-# load_dotenv(find_dotenv())
+from dotenv import load_dotenv
 
-# load env for production 
-load_dotenv('/var/www/borussia/.env.production')
-
-print(f"DEBUG: {os.getenv('DEBUG')}")
+if os.getenv("ENV", "PROD") == 'DEV':
+    load_dotenv('/var/www/borussia/.env.dev')
+else: 
+    load_dotenv('/var/www/borussia/.env.prod')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -46,12 +45,12 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "whitenoise.middleware.WhiteNoiseMiddleware", 
 ]
 
 ROOT_URLCONF = 'borussia.urls'
@@ -93,7 +92,7 @@ DATABASES = {
         'NAME': os.getenv('DB_NAME'),
         'USER': os.getenv('DB_USER'),
         'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST', 'db'),  # Use 'db' for Docker, override for production
+        'HOST': os.getenv('DB_HOST', 'locahost'),
         'PORT': os.getenv('DB_PORT', '5432'),
     }
 }
@@ -116,18 +115,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-
-USE_I18N = True
-
-USE_TZ = True
-
+LANGUAGE_CODE = 'pt-br'  # Set the default language to Brazilian Portuguese
+TIME_ZONE = 'America/Sao_Paulo'  # Set the appropriate time zone
+USE_I18N = True  # Enable internationalization
+USE_L10N = True  # Enable localization
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
@@ -142,11 +136,19 @@ STATICFILES_DIRS = [
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
+# Media files (user-uploaded files)
+
+MEDIA_URL = '/media/'  # URL prefix for media files
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Directory where media files are stored
+
+# Serve media files using whitenoise
+WHITENOISE_MANIFEST_STRICT = False
+WHITENOISE_ALLOW_ALL_ORIGINS = True
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 
 LOGIN_URL = 'entrar'
 
@@ -157,18 +159,8 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
-LANGUAGE_CODE = 'pt-br'  # Set the default language to Brazilian Portuguese
-
-TIME_ZONE = 'America/Sao_Paulo'  # Set the appropriate time zone
-
-USE_I18N = True  # Enable internationalization
-USE_L10N = True  # Enable localization
-
-# Base settings
-DEBUG = os.getenv('DEBUG', 'False') == 'True'
+DEBUG = True if os.getenv('ENV', 'PROD') == 'DEV' else False
 SECRET_KEY = os.getenv('SECRET_KEY')
 # ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
 
-ALLOWED_HOSTS = ['acaruso.com.br', 'www.acaruso.com.br', '185.185.70.187', 'localhost', '127.0.0.1']
-print(f"ALLOWED_HOSTS: {ALLOWED_HOSTS}")
-
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
