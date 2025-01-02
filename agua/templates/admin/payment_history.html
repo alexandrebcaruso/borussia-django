@@ -46,6 +46,11 @@
                                     {% endif %}
                                 </div>
                                 <div class="modal-footer">
+                                    {% if payment.receipt %}
+                                        <a href="{{ payment.receipt.url }}" target="_blank" class="btn btn-primary">
+                                            Ver em Nova Aba
+                                        </a>
+                                    {% endif %}
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
                                 </div>
                             </div>

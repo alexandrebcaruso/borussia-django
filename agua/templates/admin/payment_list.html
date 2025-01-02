@@ -119,6 +119,11 @@
                                     {% endif %}
                                 </div>
                                 <div class="modal-footer">
+                                    {% if payment.receipt %}
+                                        <a href="{{ payment.receipt.url }}" target="_blank" class="btn btn-primary">
+                                            Ver em Nova Aba
+                                        </a>
+                                    {% endif %}
                                     <button type="submit" name="action" value="approve" class="btn btn-success" onclick="setPaymentId({{ payment.id }})">Aprovar</button>
                                     <button type="submit" name="action" value="reject" class="btn btn-danger" onclick="setPaymentId({{ payment.id }})">Rejeitar</button>
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
