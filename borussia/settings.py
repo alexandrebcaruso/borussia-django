@@ -161,6 +161,4 @@ AUTHENTICATION_BACKENDS = [
 
 DEBUG = True if os.getenv('ENV', 'PROD') == 'DEV' else False
 SECRET_KEY = os.getenv('SECRET_KEY')
-# ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
-
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')

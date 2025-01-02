@@ -62,7 +62,6 @@ def home(request):
     else:
         return redirect('meus_pagamentos')
 
-
 @login_required
 def upload_receipt(request, year, month):
     payment_date = datetime(year, month, 1)  

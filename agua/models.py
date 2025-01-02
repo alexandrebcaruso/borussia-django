@@ -23,7 +23,7 @@ class Payment(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     month = models.DateField()
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=AWAITING_PAYMENT)
-    receipt = models.FileField(upload_to=user_receipts_path, null=True, blank=True)  # Use the custom path function
+    receipt = models.FileField(upload_to=user_receipts_path, null=True, blank=True)
     uploaded_at = models.DateTimeField(auto_now_add=True)
     approved_at = models.DateTimeField(null=True, blank=True)
 

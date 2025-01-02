@@ -32,10 +32,5 @@ urlpatterns = [
     path('historico-pagamentos/<int:user_id>/<int:year>/<int:month>/', views.payment_history, name='historico_pagamentos'),
 ]
 
-print(f"{settings.DEBUG} <<<<<<<<<<<<<<<<<<<<,DEBUG?")
-
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-print(urlpatterns)
-
