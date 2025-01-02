@@ -5,7 +5,7 @@ from django.contrib.auth.models import AbstractUser
 
 def user_receipts_path(instance, filename):
     """Generate a folder path for the user's receipts."""
-    return f'receipts/{instance.user.email}/{filename}'
+    return f'receipts/userid_{instance.user.id}/{filename}'
 
 class Payment(models.Model):
     AWAITING_PAYMENT = 'awaiting_payment'
