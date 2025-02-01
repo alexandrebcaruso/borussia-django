@@ -19,13 +19,15 @@ mimetypes.add_type("text/css", ".css", True)
 
 from dotenv import load_dotenv
 
-if os.getenv("ENV", "PROD") == 'DEV':
-    load_dotenv('/var/www/borussia/.env.dev')
-else: 
-    load_dotenv('/var/www/borussia/.env.prod')
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+if os.getenv("ENV", "PROD") == 'DEV':
+    load_dotenv(f"{BASE_DIR}/.env.dev")
+else: 
+    load_dotenv('/var/www/borussia/.env.prod')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -126,7 +128,7 @@ USE_L10N = True  # Enable localization
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/agua/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # If you have custom static directories:
@@ -138,8 +140,8 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Media files (user-uploaded files)
 
-MEDIA_URL = '/media/'  # URL prefix for media files
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Directory where media files are stored
+MEDIA_URL = '/agua/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Serve media files using whitenoise
 WHITENOISE_MANIFEST_STRICT = False
