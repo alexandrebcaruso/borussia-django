@@ -52,17 +52,6 @@ def user_logout(request):
     return redirect('entrar')  
 
 @login_required
-def home(request):
-    # Check if the user is an ApplicationAdmin
-    is_app_admin = request.user.roles.filter(name='ApplicationAdmin').exists()
-
-    # Redirect based on user role
-    if is_app_admin:
-        return redirect('gestao_pagamentos')
-    else:
-        return redirect('meus_pagamentos')
-
-@login_required
 def upload_receipt(request, year, month):
     payment_date = datetime(year, month, 1)  
 
