@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h2 class="text-center">Bem-vindo à Borússia: Água</h2>
+        <p class="text-center">Nossa plataforma para gerenciamento de pagamentos de água.</p>
+        {% if not user.is_authenticated %}
+        <div class="text-center mt-4">
+            <a href="{% url 'entrar' %}" class="btn btn-primary">Entrar</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

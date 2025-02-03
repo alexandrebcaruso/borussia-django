@@ -9,6 +9,9 @@ from datetime import datetime
 from django.utils import timezone
 from agua.decorators import role_required
 
+def home(request):
+    return render(request, 'home.html')
+
 def user_login(request):
     # Check if the user is an ApplicationAdmin
     is_app_admin = False

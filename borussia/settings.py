@@ -19,8 +19,6 @@ mimetypes.add_type("text/css", ".css", True)
 
 from dotenv import load_dotenv
 
-
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -42,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'agua',
+    'core'
 ]
 
 MIDDLEWARE = [
@@ -60,7 +59,10 @@ ROOT_URLCONF = 'borussia.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'core/templates'), os.path.join(BASE_DIR, 'agua/templates')],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'core/templates'),
+            os.path.join(BASE_DIR, 'agua/templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -75,16 +77,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'borussia.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 
 DATABASES = {
     'default': {
@@ -126,19 +120,19 @@ USE_L10N = True  # Enable localization
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = '/agua/static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # If you have custom static directories:
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'agua/static')
+    os.path.join(BASE_DIR, 'agua/static'),
+    os.path.join(BASE_DIR, 'core/static')
 ]
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Media files (user-uploaded files)
-
-MEDIA_URL = '/agua/media/'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Serve media files using whitenoise
