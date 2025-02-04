@@ -1,10 +1,12 @@
-/* /home/alex/dev/django-borussia/core/static/css/styles.css */
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f9;
     color: #333;
     margin: 0;
     padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 header {
@@ -15,6 +17,7 @@ header {
 }
 
 main {
+    flex: 1;
     padding: 2rem;
     max-width: 800px;
     margin: 0 auto;
@@ -29,7 +32,5 @@ footer {
     color: #fff;
     text-align: center;
     padding: 1rem 0;
-    position: fixed;
-    width: 100%;
-    bottom: 0;
+    margin-top: auto;
 }
