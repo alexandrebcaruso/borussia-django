@@ -1,4 +1,10 @@
 ### Before running the project
+Make sure to set the ENV variable to 'DEV' when developing the app.
+```bash 
+export ENV='DEV'
+```
+
+### Collect Django static files
 ```bash 
 python3 manage.py collectstatic
 ```
