@@ -10,7 +10,7 @@ from django.utils import timezone
 from agua.decorators import role_required
 
 def home(request):
-    return render(request, 'home.html')
+    return render(request, 'agua/home.html')
 
 def user_login(request):
     # Check if the user is an ApplicationAdmin
@@ -48,7 +48,7 @@ def user_login(request):
         else:
             messages.error(request, "Invalid username or password.")
     
-    return render(request, 'login.html', {'is_app_admin': is_app_admin})
+    return render(request, 'agua/login.html', {'is_app_admin': is_app_admin})
 
 def user_logout(request):
     logout(request)
@@ -82,7 +82,7 @@ def upload_receipt(request, year, month):
     else:
         form = PaymentReceiptForm(instance=payment)
 
-    return render(request, 'payments/upload_receipt.html', {'form': form, 'payment': payment})
+    return render(request, 'agua/payments/upload_receipt.html', {'form': form, 'payment': payment})
 
 @login_required
 def profile(request):
@@ -99,7 +99,7 @@ def profile(request):
         messages.success(request, 'Seu perfil foi atualizado.')
         return redirect('perfil')
 
-    return render(request, 'users/profile.html', {'is_app_admin': is_app_admin})
+    return render(request, 'agua/users/profile.html', {'is_app_admin': is_app_admin})
 
 @login_required
 def my_payments(request):
@@ -125,7 +125,7 @@ def my_payments(request):
     # Get all payments for the logged-in user for the current year
     payments = Payment.objects.filter(user=request.user, month__year=current_year)
 
-    return render(request, 'users/my_payments.html', {'payments': payments, 'is_app_admin': is_app_admin})
+    return render(request, 'agua/users/my_payments.html', {'payments': payments, 'is_app_admin': is_app_admin})
 
 from django.core.paginator import Paginator
 from django.db.models import Q
@@ -210,7 +210,7 @@ def payment_list(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(request, 'admin/payment_list.html', {
+    return render(request, 'agua/admin/payment_list.html', {
         'is_app_admin': is_app_admin,
         'page_obj': page_obj,
         'search_query': search_query,
@@ -230,7 +230,7 @@ def payment_history(request, user_id, year, month):
     payments = Payment.objects.filter(user=user, month__year=year, month__month=month).order_by('-month')
     # Create a datetime object for the selected month
     selected_month = datetime(year, month, 1)
-    return render(request, 'admin/payment_history.html', {
+    return render(request, 'agua/admin/payment_history.html', {
         'is_app_admin': is_app_admin,
         'user': user,
         'payments': payments,
