@@ -44,3 +44,25 @@ label.form-label, label.form-label ~ p{
     border-radius: 0.25rem;
 }
 
+.feature-card {
+    border: none;
+    border-radius: 15px;
+    transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+.btn-lg {
+    padding: 15px 30px;
+}
+
+.card-title {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.card-text {
+    color: #6c757d;
+}

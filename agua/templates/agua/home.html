@@ -3,13 +3,54 @@
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-8">
-        <h2 class="text-center">Bem-vindo à Borússia: Água</h2>
-        <p class="text-center">Nossa plataforma para gerenciamento de pagamentos de água.</p>
-        {% if not user.is_authenticated %}
-        <div class="text-center mt-4">
-            <a href="{% url 'entrar' %}" class="btn btn-primary">Entrar</a>
+        <div class="card shadow-lg">
+            <div class="card-body text-center">
+                <h2 class="card-title mb-4">Bem-vindo à Borússia: Água</h2>
+                <p class="card-text lead">Nossa plataforma revolucionária para o gerenciamento de pagamento de água em comunidades fechadas.</p>
+                
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="card feature-card mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Pagamentos Simplificados</h5>
+                                <p class="card-text">Gerencie suas faturas de água com total facilidade e transparência.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="card feature-card mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Relatórios Detalhados</h5>
+                                <p class="card-text">Obtenha insights completos sobre o consumo e pagamento de água.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="card feature-card mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Distribuição Justa</h5>
+                                <p class="card-text">Garanta que a água seja distribuída de forma equilibrada e justa.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="card feature-card mb-3">
+                            <h5 class="card-title">Notificações</h5>
+                            <p class="card-text">Receba lembretes e alertas sobre vencimentos e consumos.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <a href="{% url 'entrar' %}" class="btn btn-primary btn-lg">Entrar para Iniciar</a>
+                </div>
+            </div>
         </div>
-        {% endif %}
     </div>
 </div>
 {% endblock %}
