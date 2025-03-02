@@ -1,4 +1,9 @@
 {% extends 'core/base.html' %}
+{% load static %}
+
+{% block app_styles %}
+    <link rel="stylesheet" href="{% static 'core/css/styles.css' %}">
+{% endblock %}
 
 {% block content %}
     <div class="row justify-content-center">
@@ -29,6 +34,7 @@
         <div class="col-md-8">
             <h5 class="text-center">Explore</h5>
             <p class="text-center">Check out my <a href="/agua">agua</a> app for specific services.</p>
+            <p class="text-center">Check out my <a href="/aguastats">aguastats</a> app for water usage statistics.</p>
         </div>
     </div>
 {% endblock %}

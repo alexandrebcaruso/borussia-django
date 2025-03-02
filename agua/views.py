@@ -7,10 +7,14 @@ from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from datetime import datetime
 from django.utils import timezone
-from agua.decorators import role_required
+from core.decorators import role_required
 
 def home(request):
-    return render(request, 'agua/home.html')
+    is_app_admin = False
+    if request.user.is_authenticated:
+        is_app_admin = request.user.roles.filter(name='ApplicationAdmin').exists()
+    
+    return render(request, 'agua/home.html', {'is_app_admin': is_app_admin})
 
 def user_login(request):
     # Check if the user is an ApplicationAdmin
