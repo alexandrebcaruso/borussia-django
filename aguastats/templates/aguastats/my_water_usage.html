@@ -1,17 +1,15 @@
-<!-- aguastats/templates/aguastats/dashboard.html -->
 {% extends 'core/base.html' %}
-
 {% block content %}
     <div class="container mt-4">
-        <h2>Painel de Estatísticas de Uso de Água</h2>
+        <h2>Meu Uso de Água</h2>
         
-        <!-- Resumo das Estatísticas -->
+        <!-- Summary Statistics -->
         <div class="row mb-4">
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Uso Atual</h5>
-                        <p class="card-text">1200 m³</p>
+                        <p class="card-text">{{ current_usage }} m³</p>
                     </div>
                 </div>
             </div>
@@ -33,39 +31,19 @@
             </div>
         </div>
 
-        <!-- Alertas -->
+        <!-- Alerts -->
         <div class="row mb-4">
             <div class="col-md-12">
                 <div class="alert alert-warning" role="alert">
                     <h4 class="alert-heading">Atenção!</h4>
-                    <p>Uso de água elevado detectado para o usuário 'john_doe' às 16:30 hoje.</p>
+                    <p>Uso de água elevado detectado hoje.</p>
                     <hr>
-                    <p class="mb-0">Por favor, investigue e tome as medidas necessárias.</p>
+                    <p class="mb-0">Por favor, verifique seus hábitos de uso de água.</p>
                 </div>
             </div>
         </div>
 
-        <!-- Lista de Usuários -->
-        <h3>Lista de Usuários</h3>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Usuário</th>
-                    <th>Uso Atual (m³)</th>
-                    <th>Ações</th>\
-            </thead>
-            <tbody>
-                {% for water_clock in water_clocks %}
-                    <tr>
-                        <td>{{ water_clock.user.username }}</td>
-                        <td>{{ water_clock.current_usage }}</td>
-                        <td><a href="{% url 'user_water_usage' water_clock.user.id %}" class="btn btn-primary">Ver Detalhes</a></td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-
-        <!-- Gráfico de Uso -->
+        <!-- Usage Chart -->
         <h3>Gráfico de Uso</h3>
         <div class="row">
             <div class="col-md-12">
@@ -76,7 +54,7 @@
         </div>
     </div>
 
-    <!-- Incluir Chart.js -->
+    <!-- Include Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {

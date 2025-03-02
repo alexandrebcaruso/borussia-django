@@ -126,8 +126,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # If you have custom static directories:
 STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'core/static'),
     os.path.join(BASE_DIR, 'agua/static'),
-    os.path.join(BASE_DIR, 'core/static')
+    os.path.join(BASE_DIR, 'aguastats/static'),
 ]
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
@@ -157,3 +158,4 @@ AUTHENTICATION_BACKENDS = [
 DEBUG = True if os.getenv('ENV', 'PROD') == 'DEV' else False
 SECRET_KEY = os.getenv('SECRET_KEY')
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
+

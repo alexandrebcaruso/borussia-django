@@ -1,0 +1,28 @@
+<!-- aguastats/templates/aguastats/user_water_usage.html -->
+{% extends 'core/base.html' %}
+
+{% block content %}
+  <div class="container">
+    <h2>Uso de Água para {{ water_clock.user.username }}</h2>
+    <h3>Uso Atual: {{ water_clock.current_usage }} m³</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Uso de Água (m³)</th>
+          <th>Localização</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for usage_statistic in usage_statistics %}
+          <tr>
+            <td>{{ usage_statistic.date }}</td>
+            <td>{{ usage_statistic.water_usage }}</td>
+            <td>{{ usage_statistic.location }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <a href="{% url 'dashboard' %}">Voltar ao Painel</a>
+  </div>
+{% endblock %}
