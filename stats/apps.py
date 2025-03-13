@@ -1,8 +1,8 @@
 from django.apps import AppConfig
 
-class AguastatsConfig(AppConfig):
+class StatsConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'aguastats'
+    name = 'stats'
 
     def ready(self):
-        import aguastats.signals
+        import stats.signals

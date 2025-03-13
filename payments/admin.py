@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from agua.models import CustomUser, Role, Payment
+from payments.models import CustomUser, Role, Payment
 from django.utils import timezone
 from django.shortcuts import redirect
 from django.urls import path

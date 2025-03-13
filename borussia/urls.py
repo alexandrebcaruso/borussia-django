@@ -21,9 +21,9 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('agua/', include('agua.urls')),
-    path('aguastats/', include('aguastats.urls')),
-    path('', include('core.urls')),
+    path('agua/', include('core.urls')),
+    path('agua/pagamentos', include('payments.urls')),
+    path('agua/stats/', include('stats.urls')),
 ]
 
 if settings.DEBUG:

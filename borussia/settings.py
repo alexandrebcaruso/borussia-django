@@ -39,9 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'agua',
     'core',
-    'aguastats'
+    'payments',
+    'stats'
 ]
 
 MIDDLEWARE = [
@@ -62,7 +62,8 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             os.path.join(BASE_DIR, 'core/templates'),
-            os.path.join(BASE_DIR, 'agua/templates'),
+            os.path.join(BASE_DIR, 'payments/templates'),
+            os.path.join(BASE_DIR, 'stats/templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -127,8 +128,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # If you have custom static directories:
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'core/static'),
-    os.path.join(BASE_DIR, 'agua/static'),
-    os.path.join(BASE_DIR, 'aguastats/static'),
+    os.path.join(BASE_DIR, 'payments/static'),
+    os.path.join(BASE_DIR, 'stats/static'),
 ]
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
@@ -148,10 +149,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = 'entrar'
 
-AUTH_USER_MODEL = 'agua.CustomUser'
+AUTH_USER_MODEL = 'payments.CustomUser'
 
 AUTHENTICATION_BACKENDS = [
-    'agua.backends.CustomUserBackend',
+    'payments.backends.CustomUserBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
 

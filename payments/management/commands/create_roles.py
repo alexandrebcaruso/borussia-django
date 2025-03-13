@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from agua.models import Role
+from payments.models import Role
 
 class Command(BaseCommand):
     help = 'Create default roles'
