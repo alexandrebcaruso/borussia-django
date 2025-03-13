@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from payments.models import CustomUser, Role, Payment
+from core.models import CustomUser, Role
+from payments.models import Payment
 from django.utils import timezone
 from django.shortcuts import redirect
 from django.urls import path
@@ -48,6 +49,3 @@ class PaymentAdmin(admin.ModelAdmin):
 @admin.register(Role)
 class RoleAdmin(admin.ModelAdmin):
     list_display = ('name',)
-
-from django.contrib import admin
-from .models import CustomUser, Role

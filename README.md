@@ -1,8 +1,14 @@
-### Before running the project
+## Before running the project
 Make sure to set the ENV variable to 'DEV' when developing the app.
 ```bash 
 export ENV='DEV'
 ```
+
+### Create super user
+python3 manage.py createsuperuser
+
+### Run create roles command
+python3 manage.py create_roles
 
 ### Collect Django static files
 ```bash 
@@ -18,7 +24,7 @@ Tip: put the above code in a .vscode/launch.json file
 
 ### Generate database dump
 ```bash 
-$ pg_dump -h localhost -U borussia_adm --password  pagamento_borussia > database.sql 
+$ pg_dump -h localhost -U borussia_adm --password  agua_borussia > database.sql 
 ```
 
 ## Production

@@ -150,10 +150,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = 'entrar'
 
-AUTH_USER_MODEL = 'payments.CustomUser'
+AUTH_USER_MODEL = 'core.CustomUser'
 
 AUTHENTICATION_BACKENDS = [
-    'payments.backends.CustomUserBackend',
+    'core.backends.CustomUserBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
 

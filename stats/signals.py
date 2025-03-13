@@ -1,7 +1,6 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-# from django.contrib.auth.models import User
-from payments.models import CustomUser
+from core.models import CustomUser
 from .models import WaterClock
 
 @receiver(post_save, sender=CustomUser)

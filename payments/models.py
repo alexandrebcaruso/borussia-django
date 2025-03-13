@@ -1,7 +1,6 @@
 import os
 from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import AbstractUser
 
 def user_receipts_path(instance, filename):
     """Generate a folder path for the user's receipts."""
@@ -51,19 +50,3 @@ class Payment(models.Model):
         if self.receipt:
             return os.path.isfile(self.receipt.path)
         return False
-
-class CustomUser(AbstractUser):
-    email = models.EmailField(unique=True)
-    first_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
-    phone_number = models.CharField(max_length=12, blank=True, null=True)
-    roles = models.ManyToManyField('Role', related_name='users')
-
-    def __str__(self):
-        return self.username
-
-class Role(models.Model):
-    name = models.CharField(max_length=255, unique=True)
-
-    def __str__(self):
-        return self.name

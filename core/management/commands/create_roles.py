@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from payments.models import Role
+from core.models import Role
 
 class Command(BaseCommand):
     help = 'Create default roles'
@@ -9,4 +9,3 @@ class Command(BaseCommand):
         for role_name in roles:
             Role.objects.get_or_create(name=role_name)
             self.stdout.write(self.style.SUCCESS(f'Created role: {role_name}'))
-            

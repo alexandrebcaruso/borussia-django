@@ -3,54 +3,17 @@ from datetime import datetime
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.contrib.auth import login, authenticate, logout
+
 from django.utils import timezone
 from django.core.paginator import Paginator
 from django.db.models import Q
 from core.decorators import role_required
-from payments.models import Payment, CustomUser
+from core.models import CustomUser
+from payments.models import Payment
 from .forms import PaymentReceiptForm
 
 def home(request):
-    
     return render(request, 'payments/home.html')
-
-def user_login(request):
-    if request.method == "POST":
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-
-            # If the user is an app admin, ensure all regular users have a payment for the current month
-            if user.roles.filter(name='ApplicationAdmin').exists():
-                current_month = datetime.now().replace(day=1)  # Get the first day of the current month
-                regular_users = CustomUser.objects.filter(roles__name='RegularUser')
-
-                for regular_user in regular_users:
-                    # Check if the user already has a payment for the current month
-                    if not Payment.objects.filter(user=regular_user, month=current_month).exists():
-                        # Create a payment for the current month
-                        Payment.objects.create(
-                            user=regular_user,
-                            month=current_month,
-                            status=Payment.AWAITING_PAYMENT  # Default status
-                        )
-
-            # Redirect based on user role
-            if user.roles.filter(name='ApplicationAdmin').exists():
-                return redirect('gestao_pagamentos')
-            else:
-                return redirect('meus_pagamentos')
-        else:
-            messages.error(request, "Invalid username or password.")
-    
-    return render(request, 'payments/login.html')
-
-def user_logout(request):
-    logout(request)
-    return redirect('entrar')  
 
 @login_required
 def upload_receipt(request, year, month):
@@ -83,21 +46,6 @@ def upload_receipt(request, year, month):
     return render(request, 'payments/payments/upload_receipt.html', {'form': form, 'payment': payment})
 
 @login_required
-def profile(request):
-
-    if request.method == 'POST':
-        user = request.user
-        # Update the user's first name, last name, and phone number
-        user.first_name = request.POST.get('first_name', user.first_name)
-        user.last_name = request.POST.get('last_name', user.last_name)
-        user.phone_number = request.POST.get('phone_number', user.phone_number)
-        user.save()
-        messages.success(request, 'Seu perfil foi atualizado.')
-        return redirect('perfil')
-
-    return render(request, 'payments/users/profile.html')
-
-@login_required
 def my_payments(request):
     # Get the current year
     current_year = datetime.now().year
@@ -118,7 +66,7 @@ def my_payments(request):
     # Get all payments for the logged-in user for the current year
     payments = Payment.objects.filter(user=request.user, month__year=current_year)
 
-    return render(request, 'payments/users/my_payments.html', {'payments': payments})
+    return render(request, 'payments/my_payments.html', {'payments': payments})
 
 @login_required
 @role_required('ApplicationAdmin')
@@ -198,7 +146,7 @@ def payment_list(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(request, 'payments/admin/payment_list.html', {
+    return render(request, 'payments/payment_list.html', {
         'page_obj': page_obj,
         'search_query': search_query,
         'status_filter': status_filter,
@@ -215,7 +163,7 @@ def payment_history(request, user_id, year, month):
     payments = Payment.objects.filter(user=user, month__year=year, month__month=month).order_by('-month')
     # Create a datetime object for the selected month
     selected_month = datetime(year, month, 1)
-    return render(request, 'payments/admin/payment_history.html', {
+    return render(request, 'payments/payment_history.html', {
         'user': user,
         'payments': payments,
         'selected_month': selected_month
