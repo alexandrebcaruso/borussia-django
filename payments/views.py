@@ -1,27 +1,21 @@
 import os
+from datetime import datetime
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from payments.models import Payment, CustomUser
-from .forms import PaymentReceiptForm
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
-from datetime import datetime
 from django.utils import timezone
+from django.core.paginator import Paginator
+from django.db.models import Q
 from core.decorators import role_required
+from payments.models import Payment, CustomUser
+from .forms import PaymentReceiptForm
 
 def home(request):
-    is_app_admin = False
-    if request.user.is_authenticated:
-        is_app_admin = request.user.roles.filter(name='ApplicationAdmin').exists()
     
-    return render(request, 'payments/home.html', {'is_app_admin': is_app_admin})
+    return render(request, 'payments/home.html')
 
 def user_login(request):
-    # Check if the user is an ApplicationAdmin
-    is_app_admin = False
-    if request.user.is_authenticated:
-        is_app_admin = request.user.roles.filter(name='ApplicationAdmin').exists()
-
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']
@@ -52,7 +46,7 @@ def user_login(request):
         else:
             messages.error(request, "Invalid username or password.")
     
-    return render(request, 'payments/login.html', {'is_app_admin': is_app_admin})
+    return render(request, 'payments/login.html')
 
 def user_logout(request):
     logout(request)
@@ -90,8 +84,6 @@ def upload_receipt(request, year, month):
 
 @login_required
 def profile(request):
-    # Check if the user is an ApplicationAdmin
-    is_app_admin = request.user.roles.filter(name='ApplicationAdmin').exists()
 
     if request.method == 'POST':
         user = request.user
@@ -103,13 +95,10 @@ def profile(request):
         messages.success(request, 'Seu perfil foi atualizado.')
         return redirect('perfil')
 
-    return render(request, 'payments/users/profile.html', {'is_app_admin': is_app_admin})
+    return render(request, 'payments/users/profile.html')
 
 @login_required
 def my_payments(request):
-    # Check if the user is an ApplicationAdmin
-    is_app_admin = request.user.roles.filter(name='ApplicationAdmin').exists()
-
     # Get the current year
     current_year = datetime.now().year
 
@@ -129,16 +118,11 @@ def my_payments(request):
     # Get all payments for the logged-in user for the current year
     payments = Payment.objects.filter(user=request.user, month__year=current_year)
 
-    return render(request, 'payments/users/my_payments.html', {'payments': payments, 'is_app_admin': is_app_admin})
-
-from django.core.paginator import Paginator
-from django.db.models import Q
+    return render(request, 'payments/users/my_payments.html', {'payments': payments})
 
 @login_required
 @role_required('ApplicationAdmin')
 def payment_list(request):
-    is_app_admin = request.user.roles.filter(name='ApplicationAdmin').exists()
-
     # Handle POST request for actions
     if request.method == 'POST':
         payment_ids = request.POST.getlist('payment_ids')
@@ -215,7 +199,6 @@ def payment_list(request):
     page_obj = paginator.get_page(page_number)
 
     return render(request, 'payments/admin/payment_list.html', {
-        'is_app_admin': is_app_admin,
         'page_obj': page_obj,
         'search_query': search_query,
         'status_filter': status_filter,
@@ -227,16 +210,13 @@ def payment_list(request):
 @login_required
 @role_required('ApplicationAdmin')
 def payment_history(request, user_id, year, month):
-    is_app_admin = request.user.roles.filter(name='ApplicationAdmin').exists()
-
     user = CustomUser.objects.get(id=user_id)
     # Filter payments by user and the selected month
     payments = Payment.objects.filter(user=user, month__year=year, month__month=month).order_by('-month')
     # Create a datetime object for the selected month
     selected_month = datetime(year, month, 1)
     return render(request, 'payments/admin/payment_history.html', {
-        'is_app_admin': is_app_admin,
         'user': user,
         'payments': payments,
-        'selected_month': selected_month  # Pass the selected month as a datetime object
+        'selected_month': selected_month
     })
