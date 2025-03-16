@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 from django.contrib.auth import login, authenticate, logout
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -7,7 +7,12 @@ from core.models import CustomUser
 from payments.models import Payment
 
 def index(request):
-    return render(request, 'core/index.html')
+    if request.user.is_authenticated:
+        user_id = request.user.id
+    else:
+        user_id = None
+    return render(request, 'core/index.html', {'user_id': user_id})
+
 
 def user_login(request):
     if request.method == "POST":
