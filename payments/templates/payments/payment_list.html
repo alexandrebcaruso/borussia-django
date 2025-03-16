@@ -72,6 +72,7 @@
                         <th>Status</th>
                         <th>Comprovante</th>
                         <th>Histórico</th>
+                        <th>Detalhes</th>
                         <th>Ação</th>
                     </tr>
                 </thead>
@@ -95,6 +96,12 @@
                             <!-- Payment History Button -->
                             <a href="{% url 'historico_pagamentos' payment.user.id payment.month.year payment.month.month %}" class="btn btn-sm btn-info">
                                 Ver Histórico
+                            </a>
+                        </td>
+                        <td>
+                            <!-- Link to user_payments with user_id as a query parameter -->
+                            <a href="{% url 'pagamentos' %}?user_id={{ payment.user.id }}" class="btn btn-sm btn-info">
+                                Ver Pagamentos
                             </a>
                         </td>
                         <td>

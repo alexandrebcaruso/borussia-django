@@ -1,6 +1,6 @@
 import os
 from datetime import datetime
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
@@ -43,30 +43,32 @@ def upload_receipt(request, year, month):
     else:
         form = PaymentReceiptForm(instance=payment)
 
-    return render(request, 'payments/payments/upload_receipt.html', {'form': form, 'payment': payment})
+    return render(request, 'payments/upload_receipt.html', {'form': form, 'payment': payment})
 
 @login_required
-def my_payments(request):
-    # Get the current year
-    current_year = datetime.now().year
+def user_payments(request):
+    user = request.user  # Get the currently logged-in user
 
-    # Get the current month
-    current_month = datetime.now().replace(day=1)  # Get the first day of the current month
+    # For admins, allow viewing payments for any user (via user_id in query parameters)
+    is_admin = user.roles.filter(name='ApplicationAdmin').exists()
 
-    # Check if the user already has a payment for the current month
-    payment = Payment.objects.filter(user=request.user, month=current_month).first()
+    if is_admin:
+        user_id = request.GET.get('user_id')
+        if user_id:
+            target_user = get_object_or_404(CustomUser, id=user_id)
+        else:
+            # If no user_id is provided, default to the admin's own payments
+            target_user = user
+    else:
+        # For regular users, only allow viewing their own payments
+        target_user = user
 
-    if not payment:
-        # Create a payment for the current month
-        Payment.objects.create(
-            user=request.user,
-            month=current_month,
-            status=Payment.AWAITING_PAYMENT  # Default status
-        )
-    # Get all payments for the logged-in user for the current year
-    payments = Payment.objects.filter(user=request.user, month__year=current_year)
-
-    return render(request, 'payments/my_payments.html', {'payments': payments})
+    # Fetch payments for the target user
+    payments = Payment.objects.filter(user=target_user)
+    return render(request, 'payments/user_payments.html', {
+        'payments': payments, 
+        'target_user': target_user,
+    })
 
 @login_required
 @role_required('ApplicationAdmin')
