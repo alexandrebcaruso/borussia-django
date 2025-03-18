@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'core',
     'payments',
     'stats',
-    'dashboard',
 ]
 
 MIDDLEWARE = [
@@ -65,7 +64,6 @@ TEMPLATES = [
             os.path.join(BASE_DIR, 'core/templates'),
             os.path.join(BASE_DIR, 'payments/templates'),
             os.path.join(BASE_DIR, 'stats/templates'),
-            os.path.join(BASE_DIR, 'dashboard/templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {

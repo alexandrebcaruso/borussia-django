@@ -1,17 +1,20 @@
 from django.shortcuts import render, get_object_or_404
-from .models import WaterClock, UsageStatistic
 from core.decorators import role_required
+from stats.models import WaterWell, WaterWellUsage
 
 @role_required('ApplicationAdmin')
 def dashboard(request):
-    water_clocks = WaterClock.objects.all().order_by('current_usage')
-    return render(request, 'stats/dashboard.html', {'water_clocks': water_clocks})
+    water_wells = WaterWell.objects.all()
+    return render(request, 'stats/dashboard.html', {
+        'water_wells': water_wells
+    })
+
 
 @role_required('ApplicationAdmin')
-def user_water_usage(request, user_id):
-    water_clock = get_object_or_404(WaterClock, user_id=user_id)
-    usage_statistics = UsageStatistic.objects.filter(water_clock=water_clock).order_by('-date')
-    return render(request, 'stats/user_water_usage.html', {
-        'water_clock': water_clock, 
+def water_well_usage(request, well_id):
+    water_well = get_object_or_404(WaterWell, id=well_id)
+    usage_statistics = WaterWellUsage.objects.filter(water_well=water_well).order_by('-date')
+    return render(request, 'stats/water_well_usage.html', {
+        'water_well': water_well, 
         'usage_statistics': usage_statistics
-        })
+    })

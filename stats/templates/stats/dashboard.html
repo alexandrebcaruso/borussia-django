@@ -1,106 +1,28 @@
-<!-- stats/templates/stats/dashboard.html -->
 {% extends 'core/base.html' %}
 
 {% block content %}
-    <div class="container mt-4">
-        <h2>Painel de Estatísticas de Uso de Água</h2>
-        
-        <!-- Resumo das Estatísticas -->
-        <div class="row mb-4">
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Uso Atual</h5>
-                        <p class="card-text">1200 m³</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Uso Médio Hoje</h5>
-                        <p class="card-text">100 m³</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Uso Máximo Hoje</h5>
-                        <p class="card-text">500 m³</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Alertas -->
-        <div class="row mb-4">
-            <div class="col-md-12">
-                <div class="alert alert-warning" role="alert">
-                    <h4 class="alert-heading">Atenção!</h4>
-                    <p>Uso de água elevado detectado para o usuário 'john_doe' às 16:30 hoje.</p>
-                    <hr>
-                    <p class="mb-0">Por favor, investigue e tome as medidas necessárias.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Lista de Usuários -->
-        <h3>Lista de Usuários</h3>
+    <div class="container">
+        <h2>Dashboard - Water Wells</h2>
         <table class="table">
             <thead>
                 <tr>
-                    <th>Usuário</th>
-                    <th>Uso Atual (m³)</th>
-                    <th>Ações</th>\
+                    <th>Name</th>
+                    <th>Location</th>
+                    <th>Capacity (liters)</th>
+                    <th>Current Usage (m³)</th>
+                </tr>
             </thead>
             <tbody>
-                {% for water_clock in water_clocks %}
+                {% for well in water_wells %}
                     <tr>
-                        <td>{{ water_clock.user.username }}</td>
-                        <td>{{ water_clock.current_usage }}</td>
-                        <td><a href="{% url 'relogio' water_clock.user.id %}" class="btn btn-primary">Ver Detalhes</a></td>
+                        <td>{{ well.name }}</td>
+                        <td>{{ well.location }}</td>
+                        <td>{{ well.capacity }}</td>
+                        <td>{{ well.current_usage }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
-
-        <!-- Gráfico de Uso -->
-        <h3>Gráfico de Uso</h3>
-        <div class="row">
-            <div class="col-md-12">
-                <div id="usage-chart" style="height: 400px;">
-                    <canvas id="usageChart"></canvas>
-                </div>
-            </div>
-        </div>
+        <a href="{% url 'well_usage' well.id %}">View Usage Details</a>
     </div>
-
-    <!-- Incluir Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var ctx = document.getElementById('usageChart').getContext('2d');
-            var myChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'],
-                    datasets: [{
-                        label: 'Uso de Água (m³)',
-                        data: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 210, 220, 230, 240],
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-        });
-    </script>
 {% endblock %}
