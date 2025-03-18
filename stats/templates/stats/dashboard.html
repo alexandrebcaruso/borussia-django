@@ -3,26 +3,31 @@
 {% block content %}
     <div class="container">
         <h2>Dashboard - Water Wells</h2>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Location</th>
-                    <th>Capacity (liters)</th>
-                    <th>Current Usage (m³)</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for well in water_wells %}
+        {% if water_wells %}
+            <table class="table">
+                <thead>
                     <tr>
-                        <td>{{ well.name }}</td>
-                        <td>{{ well.location }}</td>
-                        <td>{{ well.capacity }}</td>
-                        <td>{{ well.current_usage }}</td>
+                        <th>Name</th>
+                        <th>Location</th>
+                        <th>Capacity (liters)</th>
+                        <th>Current Usage (m³)</th>
+                        <th></th>
                     </tr>
-                {% endfor %}
+                </thead>
+                <tbody>
+                    {% for well in water_wells %}
+                        <tr>
+                            <td>{{ well.name }}</td>
+                            <td>{{ well.location }}</td>
+                            <td>{{ well.capacity }}</td>
+                            <td>{{ well.current_usage }}</td>
+                            <td><a href="{% url 'well_usage' well.id %}">View Usage Details</a></td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                   <p>No water wells available.</p>
+                {% endif %}
             </tbody>
         </table>
-        <a href="{% url 'well_usage' well.id %}">View Usage Details</a>
     </div>
 {% endblock %}

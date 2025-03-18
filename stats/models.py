@@ -5,6 +5,7 @@ class WaterWell(models.Model):
     name = models.CharField(max_length=255)
     location = models.CharField(max_length=255)
     capacity = models.FloatField()  # in liters
+    current_usage = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     users = models.ManyToManyField(CustomUser, related_name='water_wells')

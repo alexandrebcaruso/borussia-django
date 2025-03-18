@@ -45,7 +45,7 @@ def user_login(request):
             if user.roles.filter(name='ApplicationAdmin').exists():
                 return redirect('gestao_pagamentos')
             else:
-                return redirect('meus_pagamentos')
+                return redirect('pagamentos')
         else:
             messages.error(request, "Invalid username or password.")
     

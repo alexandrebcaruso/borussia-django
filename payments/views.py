@@ -37,7 +37,7 @@ def upload_receipt(request, year, month):
             payment.save()
 
             messages.success(request, "Receipt uploaded successfully. Awaiting approval from the admin.")
-            return redirect('meus_pagamentos')
+            return redirect('pagamentos')
         else:
             messages.error(request, "There was an error uploading the receipt. Please try again.")
     else:
