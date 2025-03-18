@@ -1,10 +1,14 @@
 from django.contrib import admin
-from .models import WaterWellUsage
+from stats.models import WaterWell, WaterWellUsage, CustomUser
 
-class WaterWellUsageAdmin(admin.ModelAdmin):
-    list_display = ('id', 'water_well', 'date', 'water_usage', 'location')
-    search_fields = ('water_well__name', 'location')
-    list_filter = ('date',)
-    filter_horizontal = ()
+class WaterWellUserInline(admin.TabularInline):
+    model = WaterWell.users.through
+    extra = 0
 
-admin.site.register(WaterWellUsage, WaterWellUsageAdmin)
+class WaterWellAdmin(admin.ModelAdmin):
+    inlines = [WaterWellUserInline]
+    list_display = ('name', 'location', 'capacity')
+    search_fields = ('name', 'location')
+    list_filter = ('capacity',)
+
+admin.site.register(WaterWell, WaterWellAdmin)

@@ -4,7 +4,7 @@ from core.models import CustomUser
 class WaterWell(models.Model):
     name = models.CharField(max_length=255)
     location = models.CharField(max_length=255)
-    capacity = models.FloatField()  # in liters
+    capacity = models.FloatField()  # in m³/h
     current_usage = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -20,7 +20,7 @@ class WaterWellUsage(models.Model):
     location = models.CharField(max_length=100)
 
     def __str__(self):
-        return f"{self.water_well.name} - {self.date}: {self.water_usage} m³"
+        return f"{self.water_well.name} - {self.date}: {self.water_usage} m³/h"
     
     class Meta:
         ordering = ['-date']
