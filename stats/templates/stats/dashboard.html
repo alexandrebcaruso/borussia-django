@@ -59,7 +59,7 @@
                     <tr>
                         <td>{{ water_clock.user.username }}</td>
                         <td>{{ water_clock.current_usage }}</td>
-                        <td><a href="{% url 'user_water_usage' water_clock.user.id %}" class="btn btn-primary">Ver Detalhes</a></td>
+                        <td><a href="{% url 'relogio' water_clock.user.id %}" class="btn btn-primary">Ver Detalhes</a></td>
                     </tr>
                 {% endfor %}
             </tbody>

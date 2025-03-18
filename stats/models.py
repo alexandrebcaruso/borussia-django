@@ -1,13 +1,17 @@
 from django.db import models
-from django.conf import settings
+from core.models import CustomUser
+from dashboard.models import WaterWell
 
 class WaterClock(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    current_usage = models.FloatField(default=0.0)
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    water_well = models.ForeignKey(WaterWell, on_delete=models.SET_NULL, null=True, blank=True)
+    current_usage = models.FloatField(default=0.0)  # in m³
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.user.username} - Current Usage: {self.current_usage} m³"
-    
+        return f"{self.user.username}'s WaterClock"
+
 class UsageStatistic(models.Model):
     water_clock = models.ForeignKey(WaterClock, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)

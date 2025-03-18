@@ -15,12 +15,3 @@ def user_water_usage(request, user_id):
         'water_clock': water_clock, 
         'usage_statistics': usage_statistics
         })
-
-def my_water_usage(request):
-    water_clock = WaterClock.objects.filter(user=request.user).first()
-    if water_clock:
-        current_usage = water_clock.current_usage
-    else:
-        current_usage = 0
-
-    return render(request, 'stats/my_water_usage.html', {'current_usage': current_usage})

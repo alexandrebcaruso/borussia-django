@@ -15,6 +15,10 @@ def index(request):
 
 
 def user_login(request):
+    if request.user.is_authenticated:
+        # Redirect logged-in users to a different page, e.g., the home page
+        return redirect('index')
+
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']

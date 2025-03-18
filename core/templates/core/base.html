@@ -30,9 +30,7 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'perfil' %}">Perfil</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'sair' %}">Sair</a>
-                            </li>
+
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'relogio' user.id %}">Meu Relógio de Água</a>
                             </li>
@@ -43,8 +41,10 @@
                                 <li class="nav-item">
                                     <a class="nav-link" href="{% url 'painel' %}">Painel de Estatísticas</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'sair' %}">Sair</a>
+                                </li>
                             {% endif %}
-
                         {% else %}
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'entrar' %}">Entrar</a>
