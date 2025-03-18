@@ -24,6 +24,7 @@ urlpatterns = [
     path('agua/', include('core.urls')),
     path('agua/pagamentos/', include('payments.urls')),
     path('agua/estatisticas/', include('stats.urls')),
+    path('agua/dashboard/', include('dashboard.urls')),
 ]
 
 if settings.DEBUG:

@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',
     'payments',
-    'stats'
+    'stats',
+    'dashboard',
 ]
 
 MIDDLEWARE = [
@@ -64,6 +65,7 @@ TEMPLATES = [
             os.path.join(BASE_DIR, 'core/templates'),
             os.path.join(BASE_DIR, 'payments/templates'),
             os.path.join(BASE_DIR, 'stats/templates'),
+            os.path.join(BASE_DIR, 'dashboard/templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -160,4 +162,3 @@ AUTHENTICATION_BACKENDS = [
 DEBUG = True if os.getenv('ENV', 'PROD') == 'DEV' else False
 SECRET_KEY = os.getenv('SECRET_KEY')
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
-
