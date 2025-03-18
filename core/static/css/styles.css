@@ -1,3 +1,4 @@
+/* src/core/static/css/styles.css */
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f9;
@@ -65,4 +66,20 @@ label.form-label, label.form-label ~ p{
 
 .card-text {
     color: #6c757d;
+}
+
+.navbar-nav .dropdown-item {
+    color: #333;
+}
+
+.navbar-nav .dropdown-item:hover {
+    color: #007bff;
+}
+
+.navbar-nav .dropdown-toggle {
+    color: #fff;
+}
+
+.navbar-nav .dropdown-toggle:hover {
+    color: #007bff;
 }
