@@ -9,7 +9,6 @@ def dashboard(request):
         'water_wells': water_wells
     })
 
-
 @role_required('ApplicationAdmin')
 def water_well_usage(request, well_id):
     water_well = get_object_or_404(WaterWell, id=well_id)

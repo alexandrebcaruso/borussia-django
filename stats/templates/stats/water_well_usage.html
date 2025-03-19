@@ -1,4 +1,3 @@
-<!-- stats/templates/stats/water_well_usage.html -->
 {% extends 'core/base.html' %}
 
 {% block content %}
@@ -8,7 +7,8 @@
         <thead>
         <tr>
             <th>Data</th>
-            <th>Uso de Água (m³/h)</th>
+            <th>Uso de Água (m³)</th>
+            <th>Consumo de Energia (kWh)</th>
             <th>Localização</th>
         </tr>
         </thead>
@@ -17,11 +17,12 @@
             <tr>
             <td>{{ usage_statistic.date }}</td>
             <td>{{ usage_statistic.water_usage }}</td>
+            <td>{{ usage_statistic.kwh_consumption }}</td>
             <td>{{ usage_statistic.location }}</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
-    <a href="{% url 'dashboard' %}">Voltar ao Painel</a>
+    <a href="{% url 'painel' %}">Voltar ao Painel</a>
     </div>
 {% endblock %}

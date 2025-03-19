@@ -10,7 +10,8 @@
                         <th>Name</th>
                         <th>Location</th>
                         <th>Capacity (m³/h)</th>
-                        <th>Current Usage (m³/h)</th>
+                        <th>Current Month Usage (m³)</th>
+                        <th>Current kWh Consumption (kWh)</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -20,8 +21,9 @@
                             <td>{{ well.name }}</td>
                             <td>{{ well.location }}</td>
                             <td>{{ well.capacity }}</td>
-                            <td>{{ well.current_usage }}</td>
-                            <td><a href="{% url 'well_usage' well.id %}">View Usage Details</a></td>
+                            <td>{{ well.current_month_usage }}</td>
+                            <td>{{ well.current_kwh_consumption }}</td>
+                            <td><a href="{% url 'poco_detalhe' well.id %}">View Usage Details</a></td>
                         </tr>
                     {% endfor %}
                 {% else %}
