@@ -1,17 +1,16 @@
 {% extends 'core/base.html' %}
-
 {% block content %}
     <div class="container">
-        <h2>Dashboard - Water Wells</h2>
+        <h2>Painel - Poços de Água</h2>
         {% if water_wells %}
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Location</th>
-                        <th>Capacity (m³/h)</th>
-                        <th>Current Month Usage (m³)</th>
-                        <th>Current kWh Consumption (kWh)</th>
+                        <th>Nome</th>
+                        <th>Localização</th>
+                        <th>Capacidade (m³/h)</th>
+                        <th>Uso Água Atual (m³)</th>
+                        <th>Consumo de Energia Atual (kWh)</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -23,11 +22,11 @@
                             <td>{{ well.capacity }}</td>
                             <td>{{ well.current_month_usage }}</td>
                             <td>{{ well.current_kwh_consumption }}</td>
-                            <td><a href="{% url 'poco_detalhe' well.id %}">View Usage Details</a></td>
+                            <td><a href="{% url 'poco_detalhe' well.id %}">Ver Detalhes de Uso</a></td>
                         </tr>
                     {% endfor %}
                 {% else %}
-                   <p>No water wells available.</p>
+                    <p>Nenhum poço de água disponível.</p>
                 {% endif %}
             </tbody>
         </table>

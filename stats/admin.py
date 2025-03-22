@@ -1,5 +1,5 @@
 from django.contrib import admin
-from stats.models import WaterWell, WaterWellUsage, CustomUser
+from stats.models import WaterWell
 
 class WaterWellUserInline(admin.TabularInline):
     model = WaterWell.users.through
