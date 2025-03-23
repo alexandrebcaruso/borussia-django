@@ -17,3 +17,24 @@ def water_well_usage(request, well_id):
         'water_well': water_well, 
         'usage_statistics': usage_statistics
     })
+
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from .models import WaterWell
+
+@csrf_exempt
+def water_well_list(request):
+    wells = WaterWell.objects.all().values(
+        'public_id', 'name', 'uf', 'locality', 'nature', 'ne', 'nd', 'flow_rate', 'latitude', 'longitude', 'capacity'
+    )
+    return JsonResponse(list(wells), safe=False)
+
+@csrf_exempt
+def water_well_detail(request, public_id):
+    well = WaterWell.objects.filter(public_id=public_id).values(
+        'public_id', 'name', 'uf', 'locality', 'nature', 'ne', 'nd', 'flow_rate', 'latitude', 'longitude', 'capacity'
+    )
+    if well:
+        return JsonResponse(well[0], safe=False)
+    else:
+        return JsonResponse({'error': 'Water well not found'}, status=404)

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from stats.models import WaterWell
+from stats.models import WaterWell, WaterWellUsage
 
 class WaterWellUserInline(admin.TabularInline):
     model = WaterWell.users.through
@@ -7,8 +7,10 @@ class WaterWellUserInline(admin.TabularInline):
 
 class WaterWellAdmin(admin.ModelAdmin):
     inlines = [WaterWellUserInline]
-    list_display = ('name', 'location', 'capacity')
-    search_fields = ('name', 'location')
-    list_filter = ('capacity',)
+    list_display = ('public_id', 'name', 'uf', 'locality', 'flow_rate', 'latitude', 'longitude')
+    search_fields = ('public_id', 'name', 'locality')
+    list_filter = ('uf', 'nature')
 
 admin.site.register(WaterWell, WaterWellAdmin)
+# admin.site.register(WaterWellUsage)
+

@@ -15,7 +15,7 @@ class CustomUser(AbstractUser):
         super().save(*args, **kwargs)
         if self.is_superuser:
             admin_role, created_admin = Role.objects.get_or_create(name='Admin')
-            app_admin_role, created_app_admin = Role.objects.get_or_create(name='Application admin')
+            app_admin_role, created_app_admin = Role.objects.get_or_create(name='ApplicationAdmin')
             self.roles.add(admin_role, app_admin_role)
 
 class Role(models.Model):

@@ -1,0 +1,17 @@
+#map-container {
+    width: 100%;
+    height: 500px;
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    #map-container {
+        height: 400px;
+    }
+}
+
+@media (max-width: 480px) {
+    #map-container {
+        height: 300px;
+    }
+}

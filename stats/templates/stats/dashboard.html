@@ -1,34 +1,45 @@
 {% extends 'core/base.html' %}
+{% load static %}
 {% block content %}
     <div class="container">
         <h2>Painel - Poços de Água</h2>
         {% if water_wells %}
-            <table class="table">
+            <div id="map" style="height: 500px; width: 100%;"></div>
+            <table class="table" id="table-wells">
                 <thead>
                     <tr>
+                        <th>ID Público</th>
                         <th>Nome</th>
-                        <th>Localização</th>
+                        <th>UF</th>
+                        <th>Localidade</th>
                         <th>Capacidade (m³/h)</th>
-                        <th>Uso Água Atual (m³)</th>
-                        <th>Consumo de Energia Atual (kWh)</th>
+                        <th>Ne (m)</th>
+                        <th>Nd (m)</th>
+                        <th>Vazão (m³/h)</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for well in water_wells %}
-                        <tr>
+                        <tr data-name="{{ well.name }}" data-lat="{{ well.latitude }}" data-lng="{{ well.longitude }}">
+                            <td>{{ well.public_id }}</td>
                             <td>{{ well.name }}</td>
-                            <td>{{ well.location }}</td>
+                            <td>{{ well.uf }}</td>
+                            <td>{{ well.locality }}</td>
                             <td>{{ well.capacity }}</td>
-                            <td>{{ well.current_month_usage }}</td>
-                            <td>{{ well.current_kwh_consumption }}</td>
+                            <td>{{ well.ne }}</td>
+                            <td>{{ well.nd }}</td>
+                            <td>{{ well.flow_rate }}</td>
                             <td><a href="{% url 'poco_detalhe' well.id %}">Ver Detalhes de Uso</a></td>
                         </tr>
                     {% endfor %}
-                {% else %}
-                    <p>Nenhum poço de água disponível.</p>
-                {% endif %}
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        {% else %}
+            <p>Nenhum poço de água disponível.</p>
+        {% endif %}
     </div>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="{% static 'stats/water_wells_maps.js' %}"></script>
 {% endblock %}
