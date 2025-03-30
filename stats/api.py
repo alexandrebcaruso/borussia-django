@@ -1,8 +1,11 @@
 from django.http import JsonResponse
 from stats.models import WaterWell
+from django.core.serializers import serialize
+import json
 
 def wells_geojson(request):
-    wells = WaterWell.objects.all()
+    wells = WaterWell.objects.exclude(latitude__isnull=True).exclude(longitude__isnull=True)
+    
     features = []
     for well in wells:
         features.append({
@@ -12,19 +15,21 @@ def wells_geojson(request):
                 "coordinates": [well.longitude, well.latitude]
             },
             "properties": {
+                "id": well.public_id,
                 "name": well.name,
                 "uf": well.uf,
                 "locality": well.locality,
+                "nature": well.nature,
                 "flow_rate": well.flow_rate,
                 "ne": well.ne,
                 "nd": well.nd,
                 "capacity": well.capacity,
-                "current_month_usage": well.current_month_usage,
-                "current_kwh_consumption": well.current_kwh_consumption
+                "original_crs": well.original_crs,
+                "details_url": f"/poco/{well.id}/"
             }
         })
-    geojson = {
+    
+    return JsonResponse({
         "type": "FeatureCollection",
         "features": features
-    }
-    return JsonResponse(geojson)
+    }, json_dumps_params={'ensure_ascii': False})

@@ -21,7 +21,7 @@
                 </thead>
                 <tbody>
                     {% for well in water_wells %}
-                        <tr data-name="{{ well.name }}" data-lat="{{ well.latitude }}" data-lng="{{ well.longitude }}">
+                        <tr data-well-id="{{ well.id }}" data-lat="{{ well.latitude }}" data-lng="{{ well.longitude }}">
                             <td>{{ well.public_id }}</td>
                             <td>{{ well.name }}</td>
                             <td>{{ well.uf }}</td>
@@ -39,7 +39,7 @@
             <p>Nenhum poço de água disponível.</p>
         {% endif %}
     </div>
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <script src="{% static 'stats/water_wells_maps.js' %}"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v7.3.0/ol.css" />
+    <script src="https://cdn.jsdelivr.net/npm/ol@v7.3.0/dist/ol.js"></script>
+    <script src="{% static 'js/water_wells_map.js' %}"></script>  <!-- Novo arquivo JS -->
 {% endblock %}
